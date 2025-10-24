@@ -1,0 +1,25 @@
+<div class="flex p-4 pb-0 justify-between items-center">
+    <span class="text-xl font-bold">Reproducir Playlist</span>
+    <div class="cursor-pointer" (click)="closeModal()">
+        <svg transform="scale(1.5)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+        </svg>
+    </div>
+</div>
+<div class="p-4">
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="playlist-track-list" class="text-base  font-light">Enlaces de las Playlist:</label>
+            <textarea id="playlist-track-list" name="track-list" class="border-1 border-gray-500" rows="4" cols="30"
+                [(ngModel)]="spotifyUrl" (drop)="onSpotifyUrlDrop($event)" (dragover)="onSpotifyUrlDragOver($event)"
+                (paste)="onSpotifyUrlPaste($event)"
+                placeholder="Arrastre o pegue las URL de las listas de reproducción de Spotify aquí, separadas por comas.">
+            </textarea>
+        </div>
+        <button class="btn" (click)="playOnDevices()">Reproducir</button>
+    </div>
+</div>

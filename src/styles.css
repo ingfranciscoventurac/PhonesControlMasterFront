@@ -1,0 +1,437 @@
+/* You can add global styles to this file, and also import other style files */
+/* ============================================================
+   Complete CSS Starter Template
+   - box-sizing reset
+   - sensible default body styles
+   - form & button normalization
+   - accessibility helpers (focus-visible, sr-only)
+   - image & media defaults
+   - utility classes: container, stack, row/col
+   - CSS variables for theming
+   - responsive breakpoints
+   - print styles & reduced-motion
+   ============================================================*/
+
+/* ---------- 1. Box-sizing + base reset ---------- */
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* predictable sizing */
+}
+
+/* Remove default margins for most elements */
+:where(html, body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ol, ul, pre) {
+    margin: 0;
+}
+
+/* Provide core root defaults */
+:root {
+    /* Theme tokens - change to suit your brand */
+    --page-bg: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --primary: #0ea5a4;
+    /* teal-ish */
+    --primary-contrast: #ffffff;
+    --radius: 8px;
+    --container-max: 1200px;
+
+    /* Typography scale */
+    --fs-0: 0.75rem;
+    /* 12px */
+    --fs-1: 0.875rem;
+    /* 14px */
+    --fs-2: 1rem;
+    /* 16px */
+    --fs-3: 1.125rem;
+    /* 18px */
+    --fs-4: 1.25rem;
+    /* 20px */
+    --fs-5: 1.5rem;
+    /* 24px */
+    --lead: 1.6;
+    /* line-height multiplier */
+
+    /* Breakpoints */
+    --bp-sm: 576px;
+    --bp-md: 768px;
+    --bp-lg: 1024px;
+    --bp-xl: 1280px;
+}
+
+/* Improved font-smoothing and default font stack */
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    /* easy math -- change if you need */
+    background: var(--page-bg);
+    color: var(--text);
+    line-height: var(--lead);
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Make body take full height so min-height utilities work reliably */
+body {
+    min-height: 100vh;
+    -webkit-font-kerning: normal;
+    font-kerning: normal;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- 2. Images, media, and content flow ---------- */
+img,
+picture,
+svg,
+video,
+iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Make tables readable */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Default link styles */
+a {
+    color: var(--primary);
+    /* text-decoration: underline; */
+    text-underline-offset: 3px;
+}
+
+a:where(:link, :visited) {
+    color: var(--primary);
+}
+
+/* ---------- 3. Headings & typography defaults ---------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: inherit;
+    line-height: 1.15;
+    font-weight: 600;
+    margin: 0 0 0.5em 0;
+}
+
+p {
+    margin: 0 0 0 0;
+    color: inherit;
+    font-size: var(--fs-2);
+}
+
+/* Small utility classes for typography */
+.lead {
+    font-size: var(--fs-3);
+    color: var(--muted);
+}
+
+/* ---------- 4. Form elements normalization ---------- */
+/* Reset a lot of browser styles for inputs and buttons */
+button,
+input,
+textarea,
+select {
+    font: inherit;
+    /* color: inherit; */
+    /* background: transparent; */
+    border-radius: 0;
+    outline: none;
+}
+
+/* Buttons should be easier to style */
+button {
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 1rem;
+    /* background: var(--primary); */
+    /* color: var(--primary-contrast); */
+    border-radius: var(--radius);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Inputs & textareas default */
+input,
+textarea {
+    /* border: 1px solid #d1d5db; */
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    /* background: transparent; */
+    min-width: 0;
+    /* helps with flex child overflow */
+}
+
+/* Remove number input spin buttons in most browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Make selects look consistent */
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: none;
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+/* ---------- 5. Accessibility: focus-visible ---------- */
+/* Good focus outline for keyboard users. Uses :focus-visible if available */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--primary) 20%, transparent);
+    outline-offset: 3px;
+    border-radius: calc(var(--radius) / 2);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+/* If browser doesn't support color-mix, fallback */
+@supports not (color-mix(in srgb, var(--primary) 20%, transparent)) {
+    :focus-visible {
+        outline: 3px solid rgba(14, 165, 164, 0.15);
+        outline-offset: 3px;
+    }
+}
+
+/* ---------- 6. Utility helpers ---------- */
+/* Visually hidden (screen-reader only) */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Simple container centered with max-width */
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Vertical rhythm stack utility (gap between stacked children) */
+.stack>*+* {
+    margin-top: 1rem;
+}
+
+/* Row / column flex helpers */
+.row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.row.center {
+    align-items: center;
+    justify-content: center;
+}
+
+.col {
+    flex: 1 1 0;
+}
+
+/* Simple responsive columns helper */
+.col-1 {
+    flex: 0 0 8.3333%;
+    max-width: 8.3333%;
+}
+
+.col-2 {
+    flex: 0 0 16.6667%;
+    max-width: 16.6667%;
+}
+
+.col-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+.col-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+}
+
+.col-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* Simple utility: hide on small screens */
+.hide-sm {
+    display: none;
+}
+
+@media (min-width: var(--bp-sm)) {
+    .hide-sm {
+        display: initial;
+    }
+}
+
+/* ---------- 7. Cards & block elements ---------- */
+.card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.65));
+    border-radius: var(--radius);
+    padding: 1rem;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+/* ---------- 8. Responsive typography example ---------- */
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1.25rem;
+}
+
+h3 {
+    font-size: 1.125rem;
+}
+
+@media (min-width: var(--bp-md)) {
+    h1 {
+        font-size: 2.25rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* ---------- 9. Misc sensible defaults ---------- */
+/* Make lists comfortable */
+ul,
+ol {
+    padding-left: 0;
+    margin: 0 0 0 0;
+}
+
+/* Keep form labels readable */
+/* label {
+    display: inline-block;
+    margin-bottom: 0.25rem;
+    font-size: var(--fs-1);
+    color: var(--muted);
+} */
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---------- 10. Print-friendly styles ---------- */
+@media print {
+    :root {
+        color-scheme: light;
+    }
+
+    a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.9em;
+    }
+
+    img {
+        page-break-inside: avoid;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+
+/* ---------- 11. Tiny helpers for forms & icons ---------- */
+.field-inline {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+}
+
+/* ---------- 12. Example: simple responsive nav (minimal) ---------- */
+.nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav .brand {
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+/* ---------- 13. Safety net: normalize strong/em ---------- */
+strong {
+    font-weight: 600;
+}
+
+em {
+    font-style: italic;
+}
+
+/* ---------- 14. End of file - add project-specific overrides below ---------- */
+/* For example:
+:root { --primary: #ff6b6b; --page-bg: #f7f7fb; }
+header { background: var(--primary); color: var(--primary-contrast); }
+*/
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}

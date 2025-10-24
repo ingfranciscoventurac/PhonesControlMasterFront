@@ -1,0 +1,106 @@
+<header class="navbar navbar-expand-md d-print-none">
+    <div class="container-xl gap-4">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+            aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <img class="rounded-md" [src]="'/images/spotify-playlist-generator.png'" alt="spotify-account-photo" srcset=""
+            width="150" height="30">
+        <ul class="navbar-nav gap-2">
+            @if(permissions?.p1){
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <a class="nav-link" routerLink="/">
+                    <!-- <span class="nav-link-icon">
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="icon icon-1">
+                            <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                        </svg>
+                    </span> -->
+                    <span class="nav-link-title"> Creador de Playlist </span>
+                </a>
+            </li>
+            }
+            @if(permissions?.p2){
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <a class="nav-link" routerLink="/tracklist">
+                    <!-- <span class="nav-link-icon">
+                
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-1">
+                                            <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                            <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                            <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                        </svg>
+                                    </span> -->
+                    <span class="nav-link-title">Listado de Canciones</span>
+                </a>
+            </li>
+            }
+            @if(permissions?.p3){
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <a class="nav-link" routerLink="/devices">
+                    <!-- <span class="nav-link-icon">
+                                        
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                    class="icon icon-1">
+                                                                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                                                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                                                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                                                </svg>
+                                                            </span> -->
+                    <span class="nav-link-title">Dispositivos</span>
+                </a>
+            </li>
+            }
+            @if(permissions?.p4){
+            <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                <a class="nav-link" routerLink="/users">
+                    <!-- <span class="nav-link-icon">
+                                                    
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                                                class="icon icon-1">
+                                                                                <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                                                                                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                                                                                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                                                                            </svg>
+                                                                        </span> -->
+                    <span class="nav-link-title">Usuarios</span>
+                </a>
+            </li>
+            }
+        </ul>
+        <div class="navbar-nav flex-row order-md-last ms-auto">
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link d-flex lh-1 text-reset" data-bs-toggle="dropdown"
+                    aria-label="Open user menu">
+                    <!-- @if((spotifyService.userInfo$|async)?.images[0].url){
+                    <img class="rounded-md" [src]="(spotifyService.userInfo$|async)?.images[0].url"
+                        alt="spotify-account-photo" srcset="" width="30" height="30">
+                    } -->
+                    <div class="d-none d-xl-block">
+                        <div class="text-sm text-secondary">
+                            <div>{{ userInfo.name }} {{ userInfo.lastName }}</div>
+                        </div>
+                    </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <!-- <a href="#" class="dropdown-item">Status</a>
+                    <a href="./profile.html" class="dropdown-item">Profile</a>
+                    <a href="#" class="dropdown-item">Feedback</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="./settings.html" class="dropdown-item">Settings</a> -->
+                    <a [routerLink]="['/auth/login']" class="dropdown-item">Salir</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</header>
+<router-outlet></router-outlet>

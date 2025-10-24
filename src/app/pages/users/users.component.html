@@ -1,0 +1,42 @@
+<div class="flex flex-col p-4 gap-4">
+    <div class="flex flex-1 bg-white rounded-xl px-4 py-2 justify-end">
+        <button type="button" class="btn" (click)="createUser()">
+            Crear Usuario
+        </button>
+    </div>
+    @for (users of usersService.users$ | async; track users.id) {
+    <div class="flex justify-between items-center bg-white rounded-xl px-4 py-2">
+        <div class="flex flex-col gap-1">
+            <span class="text-xs">{{ users.statusName ?? '' }}</span>
+            <span class="text-base">{{ users.apellidos ?? '' }} {{ users.nombre ?? '' }}</span>
+            <span class="text-xs ">{{ users.email ?? '' }}</span>
+        </div>
+        <div class="flex flex-row gap-4">
+
+
+            @if(users.status==3){
+            <button class="btn btn-success" (click)="activateUser(users.id)">
+                Activar
+            </button>
+            }
+
+            @if(users.status==1){
+            <button class="btn btn-neutral" (click)="updateUserPassword(users)">
+                Cambiar Contraseña
+            </button>
+            <button class="btn" (click)="updateUser(users)">
+                Editar
+            </button>
+            <button class="btn btn-warning" (click)="blockUser(users.id)">
+                Bloquear
+            </button>
+            <button class="btn btn-danger" (click)="deleteUser(users.id)">
+                Borrar
+            </button>
+            }
+
+        </div>
+
+    </div>
+    }
+</div>

@@ -1,0 +1,102 @@
+<div class="flex p-4 gap-4">
+    <div class="flex flex-1 flex-col gap-4 bg-white rounded-xl p-4">
+
+        <span class="text-2xl font-bold ">Creador de Playlist</span>
+
+        <div class="flex flex-col gap-2">
+            <label for="playlist-name-input" class="form-label">Nombre de Playlist</label>
+            <input id="playlist-name-input" type="text" class="form-control" [(ngModel)]="playlistName">
+        </div>
+
+        <div class="flex pt-4 justify-between">
+            <div class="flex gap-2 items-center">
+                <label for="playlist-selection-fromlist" class="text-base  font-light cursor-pointer">Desde Listado de
+                    Canciones</label>
+                <input type="radio" name="playlist-selection" id="playlist-selection-fromlist"
+                    [(ngModel)]="playlistType" [value]="0" (ngModelChange)="onPlaylistTypeChange($event)">
+            </div>
+
+            <div class="flex gap-2 items-center">
+                <label for="playlist-selection-tracks" class="text-base font-light cursor-pointer">Agregar
+                    Canciones</label>
+                <input type="radio" name="playlist-selection" id="playlist-selection-tracks" [(ngModel)]="playlistType"
+                    [value]="1" (ngModelChange)="onPlaylistTypeChange($event)">
+            </div>
+            <div class="flex gap-2 items-center">
+                <label for="playlist-selection-playlist" class="text-base  font-light cursor-pointer">Desde
+                    Playlist</label>
+                <input type="radio" name="playlist-selection" id="playlist-selection-playlist"
+                    [(ngModel)]="playlistType" [value]="2" (ngModelChange)="onPlaylistTypeChange($event)">
+            </div>
+        </div>
+
+        @if(playlistType==1){
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="playlist-track-list" class="text-base  font-light">Links de Canciones:</label>
+                <textarea id="playlist-track-list" name="track-list" class=" border-1 border-gray-500" rows="4"
+                    cols="30" [(ngModel)]="spotifyUrl" readonly (drop)="onSpotifyUrlDrop($event)"
+                    (dragover)="onSpotifyUrlDragOver($event)"
+                    placeholder="Arrastra las URLs de las pistas de Spotify aquí, separadas por comas">
+            </textarea>
+            </div>
+            <button class="btn" (click)="clearTracksPlayList()">Limpiar Listado De Canciones</button>
+        </div>
+        }
+
+        @if(playlistType==2){
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="search-tracks-input" class="text-base  font-light">Link de Playlist</label>
+                <input id="search-tracks-input" type="text" class=" border-1 border-gray-500" [(ngModel)]="playlistUrl">
+            </div>
+            <div class="flex flex-1 justify-between gap-2">
+                <button class="btn" (click)="gettingAllTracksFromPlayList()">Obtener Canciones de Playlist</button>
+                <button class="btn" (click)="shuffleCurrentPlayList()">Barajar Canciones
+                    de Playlist</button>
+                @if(fromPlaylistTracks!==undefined){
+                <div class="flex flex-col gap-2">
+                    <button class="btn" (click)="addRandomTacksToPlaylist()">Agregar Canciones Aleatorias</button>
+                    <div class="flex flex-col gap-2">
+                        <label for="random-shuffle" class="text-base  font-light">%</label>
+                        <input id="random-shuffle" type="number" class=" border-1 border-gray-500"
+                            [(ngModel)]="percentageShuffle" min="10" max="80" #shuffleModel="ngModel"
+                            (change)="onPercentageShuffle(shuffleModel)">
+
+                    </div>
+                </div>
+
+                }
+            </div>
+        </div>
+        }
+        @if(playlistType==2){
+        <button class="btn btn-success" (click)="createPlayListFromPlaylist()">Crear Playlist</button>
+
+        }@else{
+        <button class="btn btn-success" (click)="createPlayList()">Crear Playlist</button>
+        }
+
+
+    </div>
+    <div class="flex flex-1 flex-col gap-4 bg-white rounded-xl p-4">
+        @if(playlistType!==0){
+
+        <div class="flex justify-between">
+            <span class="text-2xl font-bold ">Canciones</span>
+            @if(fromPlaylistTracks){
+            <span class="text-2xl font-bold ">{{fromPlaylistTracks.length}}</span>
+            }
+        </div>
+
+        <div class="flex flex-1 flex-col bg-gray-200 rounded-xl p-4 gap-4 overflow-y-auto max-h-150 ">
+            @for (detail of fromPlaylistTracks; track detail.id) {
+            <div class="flex flex-col bg-gray-50 rounded-xl p-2">
+                <span class="text-base ">{{ detail.trackName ?? '' }}</span>
+                <span class="text-xs ">{{ detail.artistName ?? '' }}</span>
+            </div>
+            }
+        </div>
+        }
+    </div>
+</div>

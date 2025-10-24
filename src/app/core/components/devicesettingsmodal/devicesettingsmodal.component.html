@@ -1,0 +1,69 @@
+<div class="flex p-4 justify-between items-center">
+    <span class="text-xl font-bold">Ajustes</span>
+    <div class="cursor-pointer" (click)="onNoClick()">
+        <svg transform="scale(1.5)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+        </svg>
+    </div>
+
+</div>
+<mat-tab-group dynamicHeight>
+
+    <mat-tab label="Información">
+        <div class="p-4">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label class="form-label">Cambiar Nombre</label>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        [(ngModel)]="newDeviceName">
+                </div>
+                <div>
+                    <div class="form-label">Dueño</div>
+                    <select class="form-select" [(ngModel)]="newOwnerId">
+                        @for (user of usersService.allActiveUsers$ | async; track user.id) {
+                        <option [value]="user.id">{{user.name}}</option>
+                        }
+                    </select>
+                </div>
+                <button class="btn" (click)="saveNewSettings()">Guardar</button>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Listado de Playlist">
+        @for (detail of devicesService.playedPlaylistList$ | async; track detail.id) {
+        <div class="flex flex-col  bg-white rounded-xl p-4 m-4">
+
+            <div class="flex flex-row justify-between items-center my-4">
+                <span class="p-2 font-bold text-xl text-gray-500">{{detail.statusName}}</span>
+                @if(detail.status==1){
+                <button class="btn btn-danger" (click)="deletePlayListFromList(detail.id)">Borrar</button>
+                }
+            </div>
+            <iframe [src]="getSpotifyEmbedUrlPlaylist(detail.playList)" class="w-full block"
+                style="border-radius:12px; height: 352px;" frameborder="0" allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+            </iframe>
+        </div>
+        }
+    </mat-tab>
+    <mat-tab label="Listado de Artistas">
+        @for (detail of devicesService.playedArtistList$ | async; track detail.id) {
+        <div class="flex flex-col  bg-white rounded-xl p-4 m-4">
+            <div class="flex flex-row justify-between items-center my-4">
+                <span class="p-2 font-bold text-xl text-gray-500">{{detail.statusName}}</span>
+                @if(detail.status==1){
+                <button class="btn btn-danger" (click)="deleteArtistFromList(detail.id)">Borrar</button>
+                }
+            </div>
+            <iframe [src]="getSpotifyEmbedUrlArtist(detail.artist)" class="w-full block"
+                style="border-radius:12px; height: 352px;" frameborder="0" allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
+            </iframe>
+        </div>
+        }
+    </mat-tab>
+</mat-tab-group>

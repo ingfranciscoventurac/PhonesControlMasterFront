@@ -1,0 +1,91 @@
+<div class="flex p-4 pb-0 justify-between items-center">
+    @if(data.canEdit){
+    <h1>Editar Usuario</h1>
+    }@else {
+    <h1>Crear Usuario</h1>
+    }
+    <div class="cursor-pointer" (click)="closeModal()">
+        <svg transform="scale(1.5)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+        </svg>
+    </div>
+</div>
+<div class="p-4">
+
+
+
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+            <label for="create-user-form-name" class="text-base  font-light">Nombre:</label>
+            <input type="text" name="create-user-form-name" id="create-user-form-name" class="border-1 border-gray-400"
+                [(ngModel)]="name">
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="create-user-form-name" class="text-base  font-light">Apellidos:</label>
+            <input type="text" name="create-user-form-name" id="create-user-form-name" class="border-1 border-gray-400"
+                [(ngModel)]="lastName">
+        </div>
+        @if(data.canEdit){
+
+        }@else {
+        <div class="flex flex-col gap-2">
+            <label for="create-user-form-name" class="text-base  font-light">Email:</label>
+            <input type="text" name="create-user-form-name" id="create-user-form-name" class="border-1 border-gray-400"
+                [(ngModel)]="email">
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="create-user-form-name" class="text-base  font-light">Contraseña:</label>
+            <input type="text" name="create-user-form-name" id="create-user-form-name" class="border-1 border-gray-400"
+                [(ngModel)]="password">
+        </div>
+        }
+
+
+        <div class="flex flex-row justify-between">
+            <div class="flex flex-row gap-2 items-center">
+                <label for="create-user-checkbox-playlist-creator" class="text-base font-light select-none">Mostrar
+                    Creador de
+                    Playlist</label>
+                <input type="checkbox" name="create-user-checkbox-playlist-creator"
+                    id="create-user-checkbox-playlist-creator" [(ngModel)]="showPlaylistCreator">
+            </div>
+            <div class="flex flex-row gap-2 items-center">
+                <label for="create-user-checkbox-track-list" class="text-base font-light select-none">Mostrar Listado de
+                    Canciones</label>
+                <input type="checkbox" name="create-user-checkbox-track-list" id="create-user-checkbox-track-list"
+                    [(ngModel)]="showTrackList">
+            </div>
+        </div>
+
+        <div class="flex flex-row justify-between">
+            <div class="flex flex-row gap-2 items-center">
+                <label for="create-user-checkbox-devices" class="text-base font-light select-none">Mostrar
+                    Dispositivos</label>
+                <input type="checkbox" name="create-user-checkbox-devices" id="create-user-checkbox-devices"
+                    [(ngModel)]="showDevices">
+            </div>
+            <div class="flex flex-row gap-2 items-center">
+                <label for="create-user-checkbox-users" class="text-base font-light select-none">Mostrar
+                    Usuarios</label>
+                <input type="checkbox" name="create-user-checkbox-users" id="create-user-checkbox-users"
+                    [(ngModel)]="showUsers">
+            </div>
+        </div>
+
+        <div class="flex justify-end gap-2">
+            @if(data.canEdit){
+            <button class="btn btn-neutral" (click)="cancelUser()">Cancelar</button>
+            <button class="btn btn-success" (click)="updateUser()">Editar</button>
+            }@else {
+            <button class="btn btn-neutral" (click)="cancelUser()">Cancelar</button>
+            <button class="btn btn-success" (click)="saveUser()">Guardar</button>
+            }
+
+        </div>
+
+    </div>
+</div>

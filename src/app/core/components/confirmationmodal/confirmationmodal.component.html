@@ -1,0 +1,15 @@
+<div class="flex flex-1 flex-col p-4 justify-between">
+    <span class="font-bold text-xl">{{message}}</span>
+    <div class="flex flex-row gap-4 self-end">
+        <button class="btn" (click)="cancel()">Cancelar</button>
+        @if(color=="success"){
+        <button class="btn btn-success" (click)="delete()">{{confirmationButton}}!</button>
+        }
+        @if(color=="warning"){
+        <button class="btn btn-warning" (click)="delete()">{{confirmationButton}}!</button>
+        }
+        @if(color=="danger"){
+        <button class="btn btn-danger" (click)="delete()">{{confirmationButton}}!</button>
+        }
+    </div>
+</div>

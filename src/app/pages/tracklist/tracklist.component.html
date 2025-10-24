@@ -1,0 +1,52 @@
+<div class="flex p-4 gap-4">
+    <div class="flex flex-1 flex-col gap-4 p-4 bg-white rounded-xl">
+        <span class="text-2xl font-bold ">Listado de Canciones</span>
+        <div class="flex gap-4">
+            <div class="flex flex-1 flex-col gap-4">
+                <div class="flex flex-col flex-1 gap-2 max-h-20">
+                    <label for="search-tracks-input" class="text-base font-light">Buscar Canciones</label>
+                    <div class="flex flex-1 gap-4">
+                        <input id="search-tracks-input" type="text" class=" border-1 border-gray-500"
+                            [(ngModel)]="searchingTrack">
+                        <button class="btn" (click)="searchTrack()">Buscar</button>
+                    </div>
+                </div>
+
+                <div class="flex-col">
+                    <div class="flex flex-col gap-2">
+                        <label for="playlist-track-list" class="text-basefont-light">Nuevas Canciones:</label>
+                        <textarea id="playlist-track-list" #trackTextarea name="track-list"
+                            class=" border-1 border-gray-500" rows="6" cols="30" [(ngModel)]="trackString" readonly
+                            (keydown)="preventTyping($event)" (drop)="onDrop($event)" (dragover)="onDragOver($event)"
+                            (paste)="onPaste($event)"
+                            placeholder="Arrastra los enlaces de pistas de Spotify aquí o pégalos (Ctrl/Cmd+V). Cada enlace añadido se separará con una coma si es necesario."></textarea>
+
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <button class="btn" (click)="addTracksToPlaylist()">Agregar Canción(es) a la Playlist</button>
+                    <button class="btn" (click)="clearTracksList()">Limpiar</button>
+                    <button class="btn" (click)="shuffleTracks()">Barajar Listado de Canciones</button>
+                    <button class="btn" (click)="clearPlaylist()">Limpiar Listado de Canciones</button>
+                </div>
+            </div>
+
+            <div class="flex flex-1 flex-col bg-gray-200 rounded-xl p-4 gap-4 overflow-y-auto max-h-150 ">
+                <span class="text-base ">{{ (tracksService.tracks$ | async).length }}</span>
+                @for (detail of tracksService.tracks$ | async; track detail.id) {
+                <div class="flex justify-between items-center bg-gray-50 rounded-xl p-2">
+                    <div class="flex flex-col">
+                        <span class="text-base ">{{ detail.trackName ?? '' }}</span>
+                        <span class="text-xs ">{{ detail.artistName ?? '' }}</span>
+                    </div>
+                    <div class="flex flex-col bg-red-100 p-2 rounded-xl cursor-pointer" (click)="
+                        deleteTrack(detail.id)">
+                        Borrar
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
