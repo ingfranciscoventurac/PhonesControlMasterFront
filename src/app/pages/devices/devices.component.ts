@@ -22,7 +22,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AddplaylistmodalComponent } from '../../core/components/addplaylistmodal/addplaylistmodal.component';
 import { AddArtistModalComponent } from '../../core/components/addartistmodal/addartistmodal.component';
-import { DeviceSettingsModalComponent } from '../../core/components/devicesettingsmodal/devicesettingsmodal.component';
+import { DeviceSettingsModalComponent } from '../../core/components/modals/devices/devicesettingsmodal/devicesettingsmodal.component';
 import { ActiveUsersModalComponent } from '../../core/components/activeusersmodal/activeusers.component';
 
 @Component({

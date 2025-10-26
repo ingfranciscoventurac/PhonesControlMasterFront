@@ -9,6 +9,7 @@ import { TrackListComponent } from './pages/tracklist/tracklist.component';
 import { DevicesComponent } from './pages/devices/devices.component';
 import { UsersComponent } from './pages/users/users.component';
 import { PermissionGuard } from './core/guards/core/guards/permission.guard';
+import { LicensesComponent } from './pages/licenses/licenses.component';
 export const routes: Routes = [
     {
         path: '',
@@ -18,6 +19,7 @@ export const routes: Routes = [
             { path: 'tracklist', component: TrackListComponent, canActivate: [PermissionGuard], data: { permission: 'p2' } },
             { path: 'devices', component: DevicesComponent, canActivate: [PermissionGuard], data: { permission: 'p3' } },
             { path: 'users', component: UsersComponent, canActivate: [PermissionGuard], data: { permission: 'p4' } },
+            { path: 'licenses', component: LicensesComponent, canActivate: [PermissionGuard], data: { permission: 'p1' } },
         ]
     },
     {

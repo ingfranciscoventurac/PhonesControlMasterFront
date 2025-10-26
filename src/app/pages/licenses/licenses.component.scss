@@ -1,0 +1,17 @@
+.svg-title {
+  font-size: 0.7rem;
+}
+
+.svg-subtitle {
+  font-size: 1rem;
+}
+
+.svg-ip {
+  font-size: 0.8rem;
+}
+
+.devicelist {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto;
+  gap: 2rem;
+}

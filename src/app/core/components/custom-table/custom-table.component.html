@@ -1,0 +1,253 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card p-2 mb-0">
+            <div class="table-responsive">
+                <div class="d-flex flex-wrap justify-content-between gap-3 mb-1">
+                    <div class="d-flex align-items-center">
+                        <select class="form-select me-2" style="width: auto" [(ngModel)]="pageSize"
+                            (change)="changePageSize(pageSize)">
+                            <option *ngFor="let size of pageSizeOptions" [value]="size">
+                                {{ size }}
+                            </option>
+                        </select>Record Por Pagina
+                    </div>
+                    @if (isCustomPagination){
+
+                    }@else{
+                    <div class="search-bar">
+                        <span><i class="bx bx-search-alt"></i></span>
+                        <input type="search" class="form-control" id="search" placeholder="Buscar"
+                            [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
+                    </div>
+                    }
+
+                </div>
+                <form [formGroup]="form">
+                    <table class="table mb-0" id="datatable_1">
+                        <thead class="table-light">
+                            <tr>
+                                @if(hasRadiobox){
+                                <th>
+                                </th>
+                                }
+
+                                <th *ngFor="let col of cols" (click)="sortBy(col.variableName)">
+                                    {{ col.headerName }}
+                                    <span *ngIf="sortedColumn === col.variableName">
+                                        {{ sortDirection === 'asc' ? '▲' : '▼' }}
+                                    </span>
+                                </th>
+                                @if(hasOverlayMenu){
+                                <th>{{"Acción"}}
+                                </th>
+                                }
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if(data.length!==0){
+                            @for (row of data; track $index; let idx = $index) {
+                            <tr>
+
+                                @if (hasRadiobox) {
+                                <td class="text-center">
+                                    <input type="radio" formControlName="radioInput" name="radioInput"
+                                        [value]="data![idx]" class="form-check-input"
+                                        (change)="onRadioChange(data![idx])" />
+                                </td> }
+
+                                @for (col of cols; track col.variableName) {
+                                <td>
+                                    @if (col.dataType === 'status') {
+                                    <span class="badge" [ngClass]="{
+                                                                            'bg-blue-subtle text-blue': row[col.variableName] === 'Repeat',
+                                                                            'bg-warning-subtle text-warning': row[col.variableName] === 'Pending Approbal'|| row[col.variableName] === 'Pending' || row[col.variableName] === 'Inactive' || row[col.variableName] === 'Procesando' || row[col.variableName] === 'procesando',
+                                                                            'bg-purple-subtle text-purple': row[col.variableName] === 'Canceled' || row[col.variableName] === 'Cancelado' || row[col.variableName] === 'cancelado',
+                                                                            'bg-success-subtle text-success': row[col.variableName] === 'Active'|| row[col.variableName] === 'Completed' || row[col.variableName] === 'completado' || row[col.variableName] === 'Completado',
+                                                                            'bg-danger-subtle text-danger': row[col.variableName] === 'Rejected'|| row[col.variableName] === 'Deleted'|| row[col.variableName] === 'Canceled' || row[col.variableName] === 'Iniciando' || row[col.variableName] === 'iniciando'
+                                                                            || row[col.variableName] === 'Rejected',
+                                                                            
+                                                                          }">{{ row[col.variableName] }}</span>
+                                    } @else if(col.dataType === 'date'){
+
+                                    @if(col.canCopy === true){
+                                    <div (click)="copyText(row[col.variableName])" role="button">
+                                        {{ getValue(row, col.variableName) | date: 'dd/MM/yyyy'}}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path
+                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                            <path
+                                                d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                            <path d="M9 12h6" />
+                                            <path d="M9 16h6" />
+                                        </svg>
+                                    </div>
+                                    }@else{
+                                    {{ getValue(row, col.variableName) | date: 'dd/MM/yyyy'}}
+                                    }
+
+                                    } @else if(col.dataType === 'dateWithHour'){
+
+                                    @if(col.canCopy === true){
+                                    <div (click)="copyText(row[col.variableName])" role="button">
+                                        {{ getValue(row, col.variableName) | date: 'dd/MM/yyyy hh:mm a' }}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" opacity="0.1"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path
+                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                            <path
+                                                d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                            <path d="M9 12h6" />
+                                            <path d="M9 16h6" />
+                                        </svg>
+                                    </div>
+                                    }@else {
+                                    {{ getValue(row, col.variableName) | date: 'dd/MM/yyyy hh:mm a' }}
+                                    }
+                                    }
+                                    @else if(col.dataType ===
+                                    'money'){
+
+                                    @if(col.canCopy === true){
+                                    <div (click)="copyText(row[col.variableName])" role="button">
+                                        {{ getValue(row, col.variableName) | number:'1.4-4'}}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" opacity="0.1"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path
+                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                            <path
+                                                d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                            <path d="M9 12h6" />
+                                            <path d="M9 16h6" />
+                                        </svg>
+                                    </div>
+                                    }@else{
+                                    {{ getValue(row, col.variableName) | number:'1.4-4'}}
+                                    }
+                                    }
+                                    @else if(col.dataType === 'twoDecimal'){
+
+                                    @if(col.canCopy === true){
+                                    <div (click)="copyText(row[col.variableName])" role="button">
+                                        {{ getValue(row, col.variableName) | number:'1.2-2'}}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" opacity="0.1"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path
+                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                            <path
+                                                d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                            <path d="M9 12h6" />
+                                            <path d="M9 16h6" />
+                                        </svg>
+                                    </div>
+                                    }@else{
+                                    {{ getValue(row, col.variableName) | number:'1.2-2'}}
+                                    }
+                                    }
+                                    @else {
+                                    @if(col.canCopy === true){
+                                    <div (click)="copyText(row[col.variableName])" role="button">
+                                        {{ getValue(row, col.variableName) }}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" opacity="0.1"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-text">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                            <path
+                                                d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" />
+                                            <path
+                                                d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
+                                            <path d="M9 12h6" />
+                                            <path d="M9 16h6" />
+                                        </svg>
+                                    </div>
+                                    }@else {
+                                    {{ getValue(row, col.variableName) }}
+                                    }
+                                    }
+
+                                </td> }
+                                @if(hasOverlayMenu){
+                                <td class="text-end">
+                                    <button class="overlay-menu-button"
+                                        (click)="toggleMenu(trigger,{rowSelected: data![idx]})" #trigger>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="lucide lucide-ellipsis-icon lucide-ellipsis">
+                                            <circle cx="12" cy="12" r="1" />
+                                            <circle cx="19" cy="12" r="1" />
+                                            <circle cx="5" cy="12" r="1" />
+                                        </svg>
+                                    </button>
+                                </td>
+                                }
+                            </tr>
+                            }
+                            }@else {
+                            <tr>
+                                <td [colSpan]="cols.length" class="text-center">
+                                    <div class="flex flex-1 p-2 justify-content-center align-items-center">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                    </div>
+                                </td>
+                            </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+                </form>
+                <div class="pagination-controls-container border-top">
+                    <div>
+                        <div class="d-flex flex-wrap justify-content-between gap-3 mb-1">
+                            <div class="d-flex align-items-center">
+                                <select class="form-select me-2" style="width: auto" [(ngModel)]="pageSize"
+                                    (change)="changePageSize(pageSize)">
+                                    <option *ngFor="let size of pageSizeOptions" [value]="size">
+                                        {{ size }}
+                                    </option>
+                                </select>Record Por Pagina
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <span class="d-flex flex-row flex-grow-1 align-items-center mx-2">Total de Records
+                            (<strong>{{totalRecords}}</strong>)</span>
+                        <button class="pagination-controls-previous-btn" (click)="previousPage()"
+                            [disabled]="currentPage === 1">{{"Anterior"}}</button>
+                        <button class="pagination-controls-page-btn " *ngFor="let page of visiblePageButtons"
+                            (click)="goToPage(page)" [class.pagination-controls-page-btn_active]="currentPage === page">
+                            {{ page }}
+                        </button>
+                        <button class="pagination-controls-next-btn" (click)="nextPage()"
+                            [disabled]="currentPage === totalPages">Siguiente</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #defaultMenuTemplate let-selected="implicit" let-closeMenu="closeMenu">
+    <div class="custom-menu">
+        <ng-container *ngTemplateOutlet="customMenuTemplate; context: { $implicit: selected, closeMenu: closeMenu }">
+        </ng-container>
+    </div>
+</ng-template>

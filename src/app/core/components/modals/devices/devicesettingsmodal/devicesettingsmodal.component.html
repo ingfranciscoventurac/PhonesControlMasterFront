@@ -14,13 +14,64 @@
 <mat-tab-group dynamicHeight>
 
     <mat-tab label="Información">
-        <div class="p-4">
+        <form class="p-4" [formGroup]="deviceInfoForm">
             <div class="flex flex-col gap-4">
+                <div>
+                    <div class="form-label">Cuenta</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="typeName">
+                </div>
+
+                <div>
+                    <div class="form-label">Status</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="statusName">
+                </div>
+
+                <div>
+                    <div class="form-label">Grupo</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="groupName">
+                </div>
+
+                <div>
+                    <div class="form-label">Email</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="email">
+                </div>
+
+                <div>
+                    <div class="form-label">Email Password</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="emailPassword">
+                </div>
+
+                <div>
+                    <div class="form-label">Contraseña De {{deviceInfoForm.get("typeName")?.value}}</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="password">
+                </div>
+
+
+                <div>
+                    <div class="form-label">Familia</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        formControlName="family">
+                </div>
+
+                <div>
+                    <div class="form-label">Expiración de Cuenta</div>
+                    <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
+                        [value]="deviceInfoForm.get('expirationDate')?.value | date: 'short' " [disabled]=" true">
+                </div>
+
                 <div>
                     <label class="form-label">Cambiar Nombre</label>
                     <input type="text" class="form-control" name="example-text-input" placeholder="Input placeholder"
                         [(ngModel)]="newDeviceName">
                 </div>
+
+
                 <div>
                     <div class="form-label">Dueño</div>
                     <select class="form-select" [(ngModel)]="newOwnerId">
@@ -29,9 +80,12 @@
                         }
                     </select>
                 </div>
-                <button class="btn" (click)="saveNewSettings()">Guardar</button>
+                <div class="flex flex-row">
+                    <button class="btn flex-auto" (click)="saveNewSettings()">Guardar</button>
+                </div>
+
             </div>
-        </div>
+        </form>
     </mat-tab>
     <mat-tab label="Listado de Playlist">
         @for (detail of devicesService.playedPlaylistList$ | async; track detail.id) {

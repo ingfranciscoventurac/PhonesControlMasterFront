@@ -14,7 +14,7 @@ export class AuthService {
       return undefined;
     }
 
-    const response = await POST_METHOD("https://panel.panelspcontrol.online/api/v1/User/LogIn",
+    const response = await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/User/LogIn",
       {
         "email": email,
         "password": password

@@ -1,0 +1,17 @@
+<div class="flex p-4 gap-4">
+    <div class="flex flex-1 flex-col gap-4 p-4 bg-white rounded-xl">
+        <div class="flex flex-1 justify-between">
+            <span class="text-2xl font-bold">Licencias</span>
+
+        </div>
+        <div class="flex-1">
+            <CustomTable [cols]="columns" [hasOverlayMenu]="true" [fetchData]="getLicenses"
+                [data$]="licensesService.licenses$" [totalRecords$]="licensesService.totalRecords$">
+                <ng-template #customMenuTemplate let-closeMenu="closeMenu">
+                    <button class="text-primary">Ver</button>
+                </ng-template>
+            </CustomTable>
+        </div>
+
+    </div>
+</div>

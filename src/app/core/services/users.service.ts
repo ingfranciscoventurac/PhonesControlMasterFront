@@ -16,7 +16,7 @@ export class UsersService {
 
   async getUsers(): Promise<void> {
     this.usersSubject.next([]);
-    await POST_METHOD("https://panel.panelspcontrol.online/api/v1/User/Pagination",
+    await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/User/Pagination",
       {
         "first": 0,
         "rows": 200,
@@ -29,32 +29,32 @@ export class UsersService {
   }
 
   async deleteUser(userId: string): Promise<void> {
-    await DELETE_METHOD(`https://panel.panelspcontrol.online/api/v1/User/ById?id=${userId}`, true);
+    await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/ById?id=${userId}`, true);
   }
 
   async blockUser(userId: string): Promise<void> {
-    await DELETE_METHOD(`https://panel.panelspcontrol.online/api/v1/User/Bloquear?id=${userId}`, true);
+    await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/Bloquear?id=${userId}`, true);
   }
 
   async activateUser(userId: string): Promise<void> {
-    await DELETE_METHOD(`https://panel.panelspcontrol.online/api/v1/User/Activar?id=${userId}`, true);
+    await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/Activar?id=${userId}`, true);
   }
 
   async createUser(newUserInfo: any): Promise<void> {
-    await POST_METHOD(`https://panel.panelspcontrol.online/api/v1/User/Add`, newUserInfo, true);
+    await POST_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/Add`, newUserInfo, true);
   }
 
   async updateUser(updatedUserInfo: any): Promise<void> {
-    await PUT_METHOD(`https://panel.panelspcontrol.online/api/v1/User/ById`, updatedUserInfo, true);
+    await PUT_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/ById`, updatedUserInfo, true);
   }
 
   async updateUserPassword(updatedUserInfo: any): Promise<void> {
-    await PUT_METHOD(`https://panel.panelspcontrol.online/api/v1/User/ChangePassword`, updatedUserInfo, true);
+    await PUT_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/ChangePassword`, updatedUserInfo, true);
   }
 
   async getAllActiveUsers(): Promise<void> {
     this.allActiveUsersSubject.next(null);
-    await GET_METHOD(`https://panel.panelspcontrol.online/api/v1/User/AllActive`, true).then((response: any) => {
+    await GET_METHOD(`https://pcapi.valoracatalog.com/api/v1/User/AllActive`, true).then((response: any) => {
       this.allActiveUsersSubject.next(response.data);
     })
   }

@@ -19,7 +19,7 @@ export class DevicesService {
 
   async getDevices(): Promise<void> {
     this.devicesSubject.next([]);
-    await POST_METHOD("https://panel.panelspcontrol.online/api/v1/Device/Pagination",
+    await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Device/Pagination",
       {
         "userId": 0,
         "first": 0,
@@ -34,7 +34,7 @@ export class DevicesService {
 
   async getDevicesAdmin(): Promise<void> {
     this.devicesSubject.next([]);
-    await POST_METHOD("https://panel.panelspcontrol.online/api/v1/Device/PaginationAllDevices",
+    await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Device/PaginationAllDevices",
       {
         "first": 0,
         "rows": 200,
@@ -47,7 +47,7 @@ export class DevicesService {
   }
 
   async playPlaylist(devices: any[], playlist: any[]): Promise<void> {
-    await POST_METHOD("https://panel.panelspcontrol.online/api/v1/PlayList/ToDevices",
+    await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/PlayList/ToDevices",
       {
         "devices": devices,
         "playList": playlist
@@ -55,7 +55,7 @@ export class DevicesService {
   }
 
   async playArtist(devices: any[], artists: any[]): Promise<void> {
-    await POST_METHOD("https://panel.panelspcontrol.online/api/v1/Artist/ToDevices",
+    await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Artist/ToDevices",
       {
         "devices": devices,
         "artists": artists
@@ -63,7 +63,7 @@ export class DevicesService {
   }
 
   async changeDeviceName(deviceId: string, newName: string, ownerId: number): Promise<void> {
-    await PUT_METHOD("https://panel.panelspcontrol.online/api/v1/Device/NameAndOwner",
+    await PUT_METHOD("https://pcapi.valoracatalog.com/api/v1/Device/NameAndOwner",
       {
         "deviceId": deviceId,
         "name": newName,
@@ -73,7 +73,7 @@ export class DevicesService {
   }
   async getListOfPlayingPlaylist(deviceId: string): Promise<void> {
     this.playedPlaylistListSubject.next([]);
-    await GET_METHOD(`https://panel.panelspcontrol.online/api/v1/PlayList/ByDevice?device=${deviceId}`
+    await GET_METHOD(`https://pcapi.valoracatalog.com/api/v1/PlayList/ByDevice?device=${deviceId}`
       , false).then((response: any) => {
         this.playedPlaylistListSubject.next(response.data);
       })
@@ -81,25 +81,25 @@ export class DevicesService {
 
   async getListOfPlayingArtist(deviceId: string): Promise<void> {
     this.playedArtistListSubject.next([]);
-    await GET_METHOD(`https://panel.panelspcontrol.online/api/v1/Artist/ByDevice?device=${deviceId}`
+    await GET_METHOD(`https://pcapi.valoracatalog.com/api/v1/Artist/ByDevice?device=${deviceId}`
       , false).then((response: any) => {
         this.playedArtistListSubject.next(response.data);
       })
   }
 
   async deletePendingPlaylist(playlistId: string): Promise<void> {
-    await DELETE_METHOD(`https://panel.panelspcontrol.online/api/v1/PlayList/ById?id=${playlistId}`
+    await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/PlayList/ById?id=${playlistId}`
       , false);
   }
 
   async deletePendingArtist(artistId: string): Promise<void> {
-    await DELETE_METHOD(`https://panel.panelspcontrol.online/api/v1/Artist/ById?id=${artistId}`
+    await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/Artist/ById?id=${artistId}`
       , false);
   }
 
 
   async assignDeviceToUsers(devices: any, userId: number): Promise<void> {
-    await PUT_METHOD(`https://panel.panelspcontrol.online/api/v1/Device/AssingToUser`,
+    await PUT_METHOD(`https://pcapi.valoracatalog.com/api/v1/Device/AssingToUser`,
       {
         "deviceId": devices,
         "userId": userId

@@ -4,23 +4,20 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
-
 } from '@angular/material/dialog';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DevicesService } from '../../services/devices.service';
+import { DevicesService } from '../../../../services/devices.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { MessageComponent } from '../message/message.component';
-import { MessageService } from '../../services/message.service';
-import { ConfirmationModalComponent } from '../confirmationmodal/confirmationmodal.component';
-import { UsersService } from '../../services/users.service';
+import { MessageService } from '../../../../services/message.service';
+import { ConfirmationModalComponent } from '../../../confirmationmodal/confirmationmodal.component';
+import { UsersService } from '../../../../services/users.service';
+import { LicensesService } from '../../../../services/licenses.service';
 export interface DialogData {
   devicesList: string[];
 }
@@ -31,22 +28,20 @@ export interface DialogData {
 @Component({
   selector: 'app-devicesettingsmodal',
   imports: [MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatFormFieldModule,
+    ReactiveFormsModule,
     MatInputModule,
     FormsModule,
     MatButtonModule,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
     MatTabsModule,
-    CommonModule, MessageComponent],
+    CommonModule],
   templateUrl: './devicesettingsmodal.component.html',
   styleUrls: ['./devicesettingsmodal.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceSettingsModalComponent implements OnInit {
+  private fb = inject(UntypedFormBuilder);
+  deviceInfoForm!: UntypedFormGroup;
   readonly dialogRef = inject(MatDialogRef);
-  messageService = inject(MessageService);
   readonly data = inject<any>(MAT_DIALOG_DATA);
   readonly deviceId = this.data.deviceId;
   readonly deviceName = this.data.currentName;
@@ -59,19 +54,33 @@ export class DeviceSettingsModalComponent implements OnInit {
   readonly dialog = inject(MatDialog);
   constructor(
     private sanitizer: DomSanitizer,
-    public usersService: UsersService
+    public usersService: UsersService,
+    private messageService: MessageService,
+    public licensesService: LicensesService,
 
   ) { }
 
 
   ngOnInit(): void {
-    this.devicesService.getListOfPlayingPlaylist(this.deviceId).then(() => {
-
-    });
-    this.devicesService.getListOfPlayingArtist(this.deviceId).then(() => {
-
-    });
+    this.devicesService.getListOfPlayingPlaylist(this.deviceId);
+    this.devicesService.getListOfPlayingArtist(this.deviceId);
     this.usersService.getAllActiveUsers();
+    this.licensesService.getLicenseByDeviceId(this.deviceId);
+    this.licensesService.deviceLicenseInfo$.subscribe(info => {
+      if (info) {
+        this.deviceInfoForm = this.fb.group({
+          statusName: [{ value: info.statusName, disabled: true }, Validators.required],
+          typeName: [{ value: info.typeName, disabled: true }, Validators.required],
+          groupName: [{ value: info.groupName, disabled: true }, Validators.required],
+          email: [{ value: info.email, disabled: true }, Validators.required],
+          password: [{ value: info.password, disabled: true }, Validators.required],
+          emailPassword: [{ value: info.emailPassword, disabled: true }, Validators.required],
+          expirationDate: [{ value: info.expirationDate, disabled: true }, Validators.required],
+          family: [{ value: info.family, disabled: true }, Validators.required],
+        });
+      }
+    });
+
   }
 
   getSpotifyEmbedUrlPlaylist(playlist: string): SafeResourceUrl {
@@ -89,10 +98,11 @@ export class DeviceSettingsModalComponent implements OnInit {
   }
 
   saveNewSettings() {
-    this.devicesService.changeDeviceName(this.deviceId, this.newDeviceName, this.newOwnerId).then(() => {
-      this.devicesService.getDevices();
-      this.messageService.showMessage('Nombre Cambiado Correctamente!', 'success');
-    });
+    console.log(this.deviceInfoForm.value);
+    // this.devicesService.changeDeviceName(this.deviceId, this.newDeviceName, this.newOwnerId).then(() => {
+    //   this.devicesService.getDevices();
+    //   this.messageService.showMessage('Nombre Cambiado Correctamente!', 'success');
+    // });
   }
 
   deleteArtistFromList(id: any) {
