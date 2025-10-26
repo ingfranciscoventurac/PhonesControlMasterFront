@@ -1,5 +1,6 @@
 <div class="flex flex-col flex-1 h-full bg-gray-200 justify-center items-center ">
-    <section class="flex flex-col bg-white p-4 w-50 rounded-xl gap-4 max-w-xl min-w-100">
+    <form class="flex flex-col bg-white p-4 w-50 rounded-xl gap-4 max-w-xl min-w-100" [formGroup]="loginForm"
+        (submit)="login()">
         <img src="/images/spotify-playlist-generator.png" width="200" class="self-center my-10">
         <div class="flex flex-col">
             <span class="font-bold text-2xl align-middle text-center">
@@ -13,20 +14,45 @@
         <section class="flex flex-col gap-4">
             <div class="flex flex-col">
                 <label for="search-tracks-input" class="form-label">Correo</label>
-                <input id="search-tracks-input" type="email" class="form-control" [(ngModel)]="email">
+                <input id="search-tracks-input" type="email" class="form-control" formControlName="email">
             </div>
             <div class="mb-3">
                 <label class="form-label">Contraseña</label>
                 <div class="input-group input-group-flat">
                     <input [type]="showPassword ? 'text' : 'password'" class="form-control" autocomplete="off"
-                        [(ngModel)]="password">
+                        formControlName="password">
                     <span class="input-group-text">
-                        <span (click)="togglePassword()" class="input-group-link cursor-pointer">Mostrar</span>
+                        <span (click)="togglePassword()" class="input-group-link cursor-pointer">
+                            @if(showPassword){
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                <path
+                                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                            </svg>
+                            }@else {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-eye-closed">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M21 9c-2.4 2.667 -5.4 4 -9 4c-3.6 0 -6.6 -1.333 -9 -4" />
+                                <path d="M3 15l2.5 -3.8" />
+                                <path d="M21 14.976l-2.492 -3.776" />
+                                <path d="M9 17l.5 -4" />
+                                <path d="M15 17l-.5 -4" />
+                            </svg>
+                            }
+
+                        </span>
                     </span>
                 </div>
+
             </div>
             @if(!loading){
-            <button type="button" class="btn" (click)="login()">
+            <button type="submit" [disabled]="this.loginForm.invalid" class="btn">
                 Acceder
             </button>
             }@else {
@@ -37,5 +63,5 @@
 
 
         </section>
-    </section>
+    </form>
 </div>

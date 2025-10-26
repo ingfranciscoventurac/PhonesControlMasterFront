@@ -1,27 +1,35 @@
-import { Component, } from '@angular/core';
+import { Component, inject, OnInit, } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from '../services/message.service';
 import { Router } from '@angular/router';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
-
-  email: string = "";
-  password: string = "";
+export class LoginComponent implements OnInit {
+  private fb = inject(UntypedFormBuilder);
+  loginForm!: UntypedFormGroup;
   loading: boolean = false;
   showPassword: boolean = false;
   constructor(private authService: AuthService, private messageService: MessageService, private router: Router) { }
 
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: ['josealbertopersonal@gmail.com', Validators.required],
+      password: ['1234', Validators.required]
+    });
+  }
+
   login() {
+    if (this.loginForm.invalid) return;
     this.loading = true;
-    this.authService.login(this.email, this.password).then((response) => {
-      console.log("🚀 ~ LoginComponent ~ login ~ response:", response)
+    this.authService.login(this.loginForm.get("email")?.value, this.loginForm.get("password")?.value).then((response) => {
       if (!response?.isSuccess || !response) {
         this.messageService.showMessage("Correo o contraseña incorrectos.", "error");
         this.loading = false;
@@ -31,7 +39,7 @@ export class LoginComponent {
         this.router.navigate(['/']);
       } else {
         window.location.href =
-          "https://spg-testing.vercel.app/api/login";
+          "https://spotify-auth-server-delta.vercel.app/api/login";
       }
 
     })
