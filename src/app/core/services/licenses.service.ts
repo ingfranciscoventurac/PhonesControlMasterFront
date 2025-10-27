@@ -34,4 +34,11 @@ export class LicensesService {
       })
   }
 
+  async addNewLicense(newLicense: any): Promise<any> {
+    await POST_METHOD(`https://pcapi.valoracatalog.com/api/v1/License/Add`, newLicense,
+      true).then((response: any) => {
+        return response;
+      })
+  }
+
 }

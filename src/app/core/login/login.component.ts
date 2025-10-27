@@ -30,14 +30,22 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) return;
     this.loading = true;
     this.authService.login(this.loginForm.get("email")?.value, this.loginForm.get("password")?.value).then((response) => {
+
       if (!response?.isSuccess || !response) {
         this.messageService.showMessage("Correo o contraseña incorrectos.", "error");
         this.loading = false;
         return;
       }
       if ("p1" in response && response.p1 == 0 || "p2" in response && response.p2 == 0) {
-        this.router.navigate(['/']);
+        const data = response as any;
+        delete data.isSuccess;
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        window.location.href =
+          "https://spotify-auth-server-delta.vercel.app/api/login";
       } else {
+        const data = response as any;
+        delete data.isSuccess;
+        localStorage.setItem("userInfo", JSON.stringify(data));
         window.location.href =
           "https://spotify-auth-server-delta.vercel.app/api/login";
       }

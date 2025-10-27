@@ -49,7 +49,6 @@ export class DeviceSettingsModalComponent implements OnInit {
   devicesService = inject(DevicesService);
   spotifyUrl: any = '';
   spotifyUrls: any = '';
-  newDeviceName: string = this.deviceName ?? "";
   newOwnerId: number = this.ownerId ?? 0;
   readonly dialog = inject(MatDialog);
   constructor(
@@ -77,6 +76,8 @@ export class DeviceSettingsModalComponent implements OnInit {
           emailPassword: [{ value: info.emailPassword, disabled: true }, Validators.required],
           expirationDate: [{ value: info.expirationDate, disabled: true }, Validators.required],
           family: [{ value: info.family, disabled: true }, Validators.required],
+          deviceName: [{ value: this.deviceName, disabled: false }, Validators.required],
+          ownerId: [{ value: this.ownerId, disabled: false }, Validators.required],
         });
       }
     });
@@ -98,11 +99,11 @@ export class DeviceSettingsModalComponent implements OnInit {
   }
 
   saveNewSettings() {
-    console.log(this.deviceInfoForm.value);
-    // this.devicesService.changeDeviceName(this.deviceId, this.newDeviceName, this.newOwnerId).then(() => {
-    //   this.devicesService.getDevices();
-    //   this.messageService.showMessage('Nombre Cambiado Correctamente!', 'success');
-    // });
+
+    this.devicesService.changeDeviceName(this.deviceId, this.deviceInfoForm.get("deviceName")?.value, this.deviceInfoForm.get("ownerId")?.value).then(() => {
+      this.devicesService.getDevices();
+      this.messageService.showMessage('Nombre Cambiado Correctamente!', 'success');
+    });
   }
 
   deleteArtistFromList(id: any) {

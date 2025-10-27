@@ -166,6 +166,7 @@ export class CustomTableComponent implements OnDestroy, OnInit, OnChanges {
 
     if (this.isCustomPagination) {
       if (this.customFetchDataType == "services") {
+
         const customPaginationRequest: ServicesPaginationRequest = {
           first: (this.currentPage - 1) * this.pageSize,
           rows: this.pageSize,
@@ -201,6 +202,25 @@ export class CustomTableComponent implements OnDestroy, OnInit, OnChanges {
           filters: this.additionalPaginationVariables.filters,
           managerId: this.additionalPaginationVariables.managerId,
         };
+
+        if (this.isCustomPagination) {
+          this.customFetchData!(customPaginationRequest);
+          return;
+        }
+      } else if (this.customFetchDataType == "licenses") {
+
+
+        const customPaginationRequest: any = {
+          first: (this.currentPage - 1) * this.pageSize,
+          rows: this.pageSize,
+          sortField: this.sortedColumn == null ? 'id' : this.sortedColumn,
+          sortOrder: sortOrderValue,
+          filters: this.additionalPaginationVariables.filters,
+          typeId: this.additionalPaginationVariables.typeId,
+          groupId: this.additionalPaginationVariables.groupId,
+          family: this.additionalPaginationVariables.family,
+          userId: this.additionalPaginationVariables.userId,
+        }
 
         if (this.isCustomPagination) {
           this.customFetchData!(customPaginationRequest);

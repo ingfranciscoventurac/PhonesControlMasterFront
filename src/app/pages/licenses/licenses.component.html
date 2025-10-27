@@ -2,13 +2,58 @@
     <div class="flex flex-1 flex-col gap-4 p-4 bg-white rounded-xl">
         <div class="flex flex-1 justify-between">
             <span class="text-2xl font-bold">Licencias</span>
+            <div class="flex gap-2">
+                <button type="button" class="btn" (click)="openNewLicenseModal()">
+                    Nueva Licencia
+                </button>
+                <button type="button" class="btn" (click)="openGroupListModal()">
+                    Grupos
+                </button>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <div>
+                <label for="searchInput" class="col-12 col-form-label text-lg-start">Buscar</label>
+                <input class="form-control" type="text" [value]="customPagination.filters" id="searchInput"
+                    (input)="sort($event,'filters')" />
+            </div>
+            <div>
+                <label for="channelsInput" class="col-12 col-form-label text-lg-start">Tipo</label>
+                <select class="form-select me-2" style="width: 100%" [value]="customPagination.typeId"
+                    id="channelsInput" (input)="sort($event,'typeId')">
+                    @for (type of (licenseTypeService.licenseType$|async); track $index) {
+                    <option [value]="type?.id">{{type.name}}</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label for="channelsInput" class="col-12 col-form-label text-lg-start">Grupo</label>
+                <select class="form-select me-2" style="width: 100%" [value]="customPagination.groupId"
+                    id="channelsInput" (input)="sort($event,'groupId')">
+                    <option [value]="0">Todos</option>
+                    @for (group of (licenseGroupService.licenseGroup$|async); track $index) {
 
+                    <option [value]="group?.id">{{group.name}}</option>
+                    }
+                </select>
+            </div>
+            <div>
+                <label for="channelsInput" class="col-12 col-form-label text-lg-start">Familia</label>
+                <select class="form-select me-2" style="width: 100%" [value]="customPagination.family"
+                    id="channelsInput" (input)="sort($event,'family')">
+                    <option [value]="0">Todos</option>
+                    <option [value]="1">No</option>
+                    <option [value]="2">Si</option>
+                </select>
+            </div>
         </div>
         <div class="flex-1">
-            <CustomTable [cols]="columns" [hasOverlayMenu]="true" [fetchData]="getLicenses"
-                [data$]="licensesService.licenses$" [totalRecords$]="licensesService.totalRecords$">
+            <CustomTable [cols]="columns" [hasOverlayMenu]="true" [customFetchData]="getLicenses"
+                [data$]="licensesService.licenses$" [totalRecords$]="licensesService.totalRecords$"
+                [isCustomPagination]="true" [additionalPaginationVariables]="customPagination"
+                [customFetchDataType]="'licenses'">
                 <ng-template #customMenuTemplate let-closeMenu="closeMenu">
-                    <button class="text-primary">Ver</button>
+                    <button class="text-neutral" (click)="closeMenu()">Ver</button>
                 </ng-template>
             </CustomTable>
         </div>
