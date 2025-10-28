@@ -168,7 +168,7 @@ export class NewLicenseGroupModalComponent implements OnInit {
 
     const formattedWarrantyExpirationDate = isNaN(warrantyExpirationDate.getTime())
       ? null
-      : purchaseDate.toISOString();
+      : warrantyExpirationDate.toISOString();
 
     const newLicenseGroup =
     {
@@ -179,10 +179,8 @@ export class NewLicenseGroupModalComponent implements OnInit {
       "warrantyExpirationDate": formattedWarrantyExpirationDate
     }
     this.licenseGroupService.addNewLicenseGroup(newLicenseGroup).then((response: any) => {
-      if (response.result == "Ok") {
-        this.messageService.showMessage("Grupo de licencias creado.", "success");
-        this.closeModal();
-      }
+      this.messageService.showMessage("Grupo de licencias creado.", "success");
+      this.closeModal();
     });
   }
 }

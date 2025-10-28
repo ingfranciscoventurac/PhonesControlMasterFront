@@ -21,15 +21,12 @@ import { LicenseGroupService } from '../../../../services/licenseGroup.service';
 import { LicenseTypeService } from '../../../../services/licenseType.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LicensesService } from '../../../../services/licenses.service';
-export interface DialogData {
-  devicesList: string[];
-}
 
 /**
  * @title Dialog Overview
  */
 @Component({
-  selector: 'NewLicenseModal',
+  selector: 'EditLicenseGroupModal',
   providers: [provideNativeDateAdapter()],
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatFormFieldModule,
     MatInputModule,
@@ -37,56 +34,36 @@ export interface DialogData {
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule, MatInputModule, MatDatepickerModule],
-  templateUrl: './newLicenseModal.component.html',
+  templateUrl: './editLicenseGroupModal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewLicenseModalComponent implements OnInit {
-  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
+export class EditLicenseGroupModalComponent implements OnInit {
   private fb = inject(UntypedFormBuilder);
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   private licensesService = inject(LicensesService);
   public licenseGroupService = inject(LicenseGroupService);
   public licenseTypeService = inject(LicenseTypeService);
   readonly dialogRef = inject(MatDialogRef);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  readonly devices = model(this.data.devicesList);
+  readonly data = inject<any>(MAT_DIALOG_DATA);
+  readonly licenseGroupInfo = this.data.licenseGroupInfo;
   devicesService = inject(DevicesService);
   spotifyUrl: any = '';
   spotifyUrls: any = '';
-  newLicenseForm!: UntypedFormGroup;
+  editLicenseForm!: UntypedFormGroup;
   constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.newLicenseForm = this.fb.group({
-      groupId: [{ value: "", disabled: false }, Validators.required],
-      typeId: [{ value: "", disabled: false }, Validators.required],
-      email: [{ value: "", disabled: false }, Validators.required],
-      password: [{ value: "", disabled: false }, Validators.required],
-      emailPassword: [{ value: "", disabled: false }, Validators.required],
-      expirationDate: [{ value: "", disabled: false }, Validators.required],
-      family: [{ value: "", disabled: false }, Validators.required],
+    this.editLicenseForm = this.fb.group({
+      id: [{ value: this.licenseGroupInfo.id, disabled: false }, Validators.required],
+      typeId: [{ value: this.licenseGroupInfo.typeId, disabled: false }, Validators.required],
+      name: [{ value: this.licenseGroupInfo.name, disabled: false }, Validators.required],
+      purchaseDate: [{ value: this.licenseGroupInfo.purchaseDate, disabled: false }, Validators.required],
+      warrantyExpirationDate: [{ value: this.licenseGroupInfo.warrantyExpirationDate, disabled: false }, Validators.required],
     });
-
-    this.newLicenseForm.get('expirationDate')?.valueChanges.subscribe((value) => {
-      if (value instanceof Date) {
-        const isoString = value.toISOString();
-        this.newLicenseForm.get('expirationDate')?.setValue(isoString, { emitEvent: false });
-      }
-    });
-
+    console.log(this.licenseGroupInfo);
   }
 
   closeModal(): void {
-    this.dialogRef.close();
-  }
-
-  playOnDevices() {
-    if (this.data.devicesList.length == 0 || this.spotifyUrl.length == 0) {
-      this.messageService.showMessage("Necesitas agregar el/los enlace(s) de artista que deseas reproducir.", "error");
-      return;
-    }
-    this.devicesService.playArtist(this.data.devicesList, this.spotifyUrls).then(() => {
-      this.messageService.showMessage("Listado de playlist agregado con éxito.", "success");
-    });
     this.dialogRef.close();
   }
 
@@ -165,29 +142,31 @@ export class NewLicenseModalComponent implements OnInit {
     console.log('Playlist IDs after paste:', this.spotifyUrl);
   }
 
-  saveNewLicense() {
-    if (this.newLicenseForm.invalid) {
+  saveEditLicenseGroup() {
+    if (this.editLicenseForm.invalid) {
       return;
     }
-    const formValue = this.newLicenseForm.value;
-    const expirationDate = new Date(formValue.expirationDate); // 👈 always returns a Date
-
-    const formattedDate = isNaN(expirationDate.getTime())
+    const purchaseDate = new Date(this.editLicenseForm.get("purchaseDate")?.value); // 👈 always returns a Date
+    const warrantyExpirationDate = new Date(this.editLicenseForm.get("warrantyExpirationDate")?.value); // 👈 always returns a Date
+    const formattedPurchaseDate = isNaN(purchaseDate.getTime())
       ? null
-      : expirationDate.toISOString();
+      : purchaseDate.toISOString();
 
-    const newLicense = {
-      "userId": this.userInfo.id,
-      "groupId": Number(this.newLicenseForm.get("groupId")?.value),
-      "typeId": Number(this.newLicenseForm.get("typeId")?.value),
-      "email": this.newLicenseForm.get("email")?.value,
-      "password": this.newLicenseForm.get("password")?.value,
-      "emailPassword": this.newLicenseForm.get("emailPassword")?.value,
-      "expirationDate": formattedDate,
-      "family": Number(this.newLicenseForm.get("family")?.value),
+    const formattedWarrantyExpirationDate = isNaN(warrantyExpirationDate.getTime())
+      ? null
+      : warrantyExpirationDate.toISOString();
+
+    const newLicenseGroup =
+    {
+      "id": this.editLicenseForm.get("id")?.value,
+      "typeId": Number(this.editLicenseForm.get("typeId")?.value),
+      "name": this.editLicenseForm.get("name")?.value,
+      "purchaseDate": formattedPurchaseDate,
+      "warrantyExpirationDate": formattedWarrantyExpirationDate
     }
-    this.licensesService.addNewLicense(newLicense).then(response => {
-      console.log(response);
+    this.licenseGroupService.editNewLicenseGroup(newLicenseGroup).then((response: any) => {
+      console.log("🚀 ~ EditLicenseGroupModalComponent ~ saveEditLicenseGroup ~ response:", response)
+      this.messageService.showMessage("Grupo de licencias editado.", "success");
       this.closeModal();
     });
   }

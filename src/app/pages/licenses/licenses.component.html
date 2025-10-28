@@ -3,8 +3,8 @@
         <div class="flex flex-1 justify-between">
             <span class="text-2xl font-bold">Licencias</span>
             <div class="flex gap-2">
-                <button type="button" class="btn" (click)="openNewLicenseModal()">
-                    Nueva Licencia
+                <button type="button" class="btn" (click)="openLicenseListModal()">
+                    Licencias
                 </button>
                 <button type="button" class="btn" (click)="openGroupListModal()">
                     Grupos
@@ -51,9 +51,11 @@
             <CustomTable [cols]="columns" [hasOverlayMenu]="true" [customFetchData]="getLicenses"
                 [data$]="licensesService.licenses$" [totalRecords$]="licensesService.totalRecords$"
                 [isCustomPagination]="true" [additionalPaginationVariables]="customPagination"
-                [customFetchDataType]="'licenses'">
+                [customFetchDataType]="'licenses'" (rowSelected)="rowSelected($event)">
                 <ng-template #customMenuTemplate let-closeMenu="closeMenu">
-                    <button class="text-neutral" (click)="closeMenu()">Ver</button>
+                    <!-- <button class="text-primary" (click)="openEditLicenseModal();closeMenu()">Editar</button> -->
+                    <button class="text-danger"
+                        (click)="openUnassignDeviceLicenseModal();closeMenu()">Desasignar</button>
                 </ng-template>
             </CustomTable>
         </div>

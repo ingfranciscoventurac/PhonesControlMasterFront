@@ -25,7 +25,7 @@ export class UsersComponent implements OnInit {
       width: '40vw', // or '90vw'
       maxWidth: '40vw', // to override default 80vw
       height: "250px",
-      data: { color: "danger", confirmationButton: "Borrar", canEdit: false, message: "¿Estás seguro de que deseas borrar a este usuario?" },
+      data: { color: "danger", confirmationButton: "Eliminar", canEdit: false, message: "¿Estás seguro de que deseas eliminar a este usuario?" },
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result?.canDelete !== undefined && result?.canDelete) {
@@ -64,8 +64,8 @@ export class UsersComponent implements OnInit {
 
   createUser() {
     const dialogRef = this.dialog.open(CreateUserModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
       height: "600px",
       data: { color: "neutral", confirmationButton: "Crear", canEdit: false },
       disableClose: true
@@ -79,8 +79,8 @@ export class UsersComponent implements OnInit {
 
   updateUser(currentUser: any) {
     const dialogRef = this.dialog.open(CreateUserModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
       height: "600px",
       data: { color: "neutral", confirmationButton: "Actualizar", canEdit: true, currentUser: currentUser },
       disableClose: true
@@ -94,8 +94,8 @@ export class UsersComponent implements OnInit {
 
   updateUserPassword(currentUser: any) {
     const dialogRef = this.dialog.open(ChangeUserPasswordModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
       height: "600px",
       data: { color: "neutral", confirmationButton: "Cambiar Contraseña", canEdit: true, currentUser: currentUser },
       disableClose: true

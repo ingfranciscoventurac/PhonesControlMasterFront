@@ -48,13 +48,14 @@
                         <tbody>
                             @if(data.length!==0){
                             @for (row of data; track $index; let idx = $index) {
-                            <tr>
+                            <tr (click)="selectRow(data![idx])" [class.table-active]="isSelected(data![idx])"
+                                tabindex="0" (keydown.enter)="selectRow(data![idx])">
 
                                 @if (hasRadiobox) {
-                                <td class="text-center">
+                                <td class="text-center" *ngIf="hasRadiobox">
                                     <input type="radio" formControlName="radioInput" name="radioInput"
                                         [value]="data![idx]" class="form-check-input"
-                                        (change)="onRadioChange(data![idx])" />
+                                        (change)="onRadioChange(data![idx])" (click)="$event.stopPropagation()" />
                                 </td> }
 
                                 @for (col of cols; track col.variableName) {
@@ -246,7 +247,7 @@
 </div>
 
 <ng-template #defaultMenuTemplate let-selected="implicit" let-closeMenu="closeMenu">
-    <div class="custom-menu">
+    <div class="custom-menu p-2">
         <ng-container *ngTemplateOutlet="customMenuTemplate; context: { $implicit: selected, closeMenu: closeMenu }">
         </ng-container>
     </div>

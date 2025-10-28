@@ -6,16 +6,11 @@ import { CommonModule } from '@angular/common';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
   MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DevicesService } from '../../../../services/devices.service';
 import { MessageService } from '../../../../services/message.service';
 import { LicenseGroupService } from '../../../../services/licenseGroup.service';
 import { LicenseTypeService } from '../../../../services/licenseType.service';
@@ -25,6 +20,8 @@ import { CustomTableComponent } from '../../../custom-table/custom-table.compone
 import { NewLicenseGroupModalComponent } from '../new-license-group-modal/newLicenseGroupModal.component';
 import { EditLicenseGroupModalComponent } from '../edit-license-group-modal/editLicenseGroupModal.component';
 import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
+import { NewLicenseModalComponent } from '../new-license-modal/newLicenseModal.component';
+import { EditLicenseModalComponent } from '../edit-license-modal/editLicenseModal.component';
 export interface DialogData {
   devicesList: string[];
 }
@@ -33,7 +30,7 @@ export interface DialogData {
  * @title Dialog Overview
  */
 @Component({
-  selector: 'GroupListModal',
+  selector: 'LicensesListModal',
   providers: [provideNativeDateAdapter()],
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatFormFieldModule,
     MatInputModule,
@@ -42,34 +39,38 @@ export interface DialogData {
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule, MatInputModule, MatDatepickerModule],
-  templateUrl: './groupListModal.component.html',
+  templateUrl: './licenses-list-modal.component.html',
 })
-export class GroupListModalComponent implements OnInit {
+export class LicensesListModalComponent implements OnInit {
+  //DEPENDENCIES///////////////////////////////////////////////////////
   readonly dialog = inject(MatDialog);
   private fb = inject(UntypedFormBuilder);
-  selectedRow: any;
-  private licensesService = inject(LicensesService);
+  public licensesService = inject(LicensesService);
   public licenseGroupService = inject(LicenseGroupService);
   public licenseTypeService = inject(LicenseTypeService);
   readonly dialogRef = inject(MatDialogRef);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  //DEPENDENCIES///////////////////////////////////////////////////////
+
+  //VARIABELS///////////////////////////////////////////////////////
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
+  selectedRow: any;
   readonly devices = model(this.data.devicesList);
-  devicesService = inject(DevicesService);
-  spotifyUrl: any = '';
-  spotifyUrls: any = '';
   newLicenseForm!: UntypedFormGroup;
 
   columns = [
     { variableName: 'id', headerName: 'Id', dataType: 'string' },
-    { variableName: 'name', headerName: 'Nombre', dataType: 'string' },
-    { variableName: 'typeName', headerName: 'Tipo', dataType: 'string' },
-    { variableName: 'statusName', headerName: 'Estatus', dataType: 'status' },
-    { variableName: 'purchaseDate', headerName: 'Fecha de Compra', dataType: 'date' },
-    { variableName: 'warrantyExpirationDate', headerName: 'Expiración de Garantía', dataType: 'date' },
+    // { variableName: 'name', headerName: 'Nombre de Dispositivo', dataType: 'string' },
+    { variableName: 'typeName', headerName: 'Tipo De Cuenta', dataType: 'string' },
+    { variableName: 'groupName', headerName: 'Grupo', dataType: 'string' },
+    { variableName: 'email', headerName: 'Correo', dataType: 'string' },
+    { variableName: 'expirationDate', headerName: 'Fecha De Expiración', dataType: 'dateWithHour' },
+    { variableName: 'family', headerName: 'Familia', dataType: 'string' },
+    { variableName: 'statusName', headerName: 'Status', dataType: 'status' },
+    // { variableName: 'daysLeftLicenseExpiration', headerName: 'Dias Restantes', dataType: 'status' },
+    // { variableName: 'daysLeftWarrantyExpiration', headerName: 'Dias De Garantía', dataType: 'status' },
   ];
-
-
-
+  //VARIABELS///////////////////////////////////////////////////////
 
   constructor(private messageService: MessageService) { }
 
@@ -83,38 +84,20 @@ export class GroupListModalComponent implements OnInit {
       expirationDate: [{ value: "", disabled: false }, Validators.required],
       family: [{ value: "", disabled: false }, Validators.required],
     });
-
-    this.newLicenseForm.get('expirationDate')?.valueChanges.subscribe((value) => {
-      if (value instanceof Date) {
-        const isoString = value.toISOString();
-        this.newLicenseForm.get('expirationDate')?.setValue(isoString, { emitEvent: false });
-      }
-    });
-
   }
 
-  rowSelected(data: any) {
-    // if (formName) {
-    //   this[formName!]?.patchValue({
-    //     [formVariable]: data
-    //   });
-    // } else {
-    this.selectedRow = data;
-    console.log(this.selectedRow)
-    // }
-  }
-
-  getLicenseGroupPagination = (pagination: any) => {
-    this.licenseGroupService.getLicenseGroupPagination(pagination);
-
+  getLicenses = (pagination: any) => {
+    this.licensesService.getLicensePagination(pagination);
   };
 
-  closeModal(): void {
-    this.dialogRef.close();
+  rowSelected(data: any) {
+    this.selectedRow = data;
+    console.log(this.selectedRow)
   }
 
-  openNewLicenseGroupModal() {
-    const dialogRef = this.dialog.open(NewLicenseGroupModalComponent, {
+
+  openNewLicenseModal() {
+    const dialogRef = this.dialog.open(NewLicenseModalComponent, {
       width: '80vw', // or '90vw'
       maxWidth: '80vw', // to override default 80vw
       height: "600px",
@@ -130,12 +113,12 @@ export class GroupListModalComponent implements OnInit {
     });
   }
 
-  openEditLicenseGroupModal(data: any) {
-    const dialogRef = this.dialog.open(EditLicenseGroupModalComponent, {
+  openEditLicenseModal() {
+    const dialogRef = this.dialog.open(EditLicenseModalComponent, {
       width: '80vw', // or '90vw'
       maxWidth: '80vw', // to override default 80vw
       height: "600px",
-      data: { licenseGroupInfo: data, multi: true },
+      data: { licenseInfo: this.selectedRow, multi: true },
 
     });
 
@@ -148,20 +131,20 @@ export class GroupListModalComponent implements OnInit {
   }
 
 
-  openDeleteLicenseGroupModal(data: any) {
+  openDeleteLicenseModal() {
     const payload = {
       licenseGroupInfo: {
-        ...data,
-        deleteType: "licenseGroup",
+        ...this.selectedRow,
+        deleteType: "license",
         multi: true,
       },
     };
     console.log(payload);
+
     const dialogRef = this.dialog.open(DeleteConfirmationModalComponent, {
       width: '80vw', // or '90vw'
       maxWidth: '80vw', // to override default 80vw
       data: payload,
-
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -172,92 +155,6 @@ export class GroupListModalComponent implements OnInit {
     });
   }
 
-
-  playOnDevices() {
-    if (this.data.devicesList.length == 0 || this.spotifyUrl.length == 0) {
-      this.messageService.showMessage("Necesitas agregar el/los enlace(s) de artista que deseas reproducir.", "error");
-      return;
-    }
-    this.devicesService.playArtist(this.data.devicesList, this.spotifyUrls).then(() => {
-      this.messageService.showMessage("Listado de playlist agregado con éxito.", "success");
-    });
-    this.dialogRef.close();
-  }
-
-  onSpotifyUrlDragOver(event: DragEvent) {
-    event.preventDefault(); // Allow drop
-  }
-
-  onSpotifyUrlDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const data = event.dataTransfer?.getData('text/plain') || '';
-    const url = data.trim();
-
-    const spotifyPlaylistPattern = /^https:\/\/open\.spotify\.com\/artist\/([A-Za-z0-9]+)(\?.*)?$/;
-    const match = spotifyPlaylistPattern.exec(url);
-
-    if (!match) {
-      console.warn('Invalid Spotify Artist URL:', url);
-      return;
-    }
-
-    const playlistId = match[1]; // Extracted playlist ID
-
-    // Append with comma if already has content
-    if (this.spotifyUrl && this.spotifyUrl.trim() !== '') {
-      this.spotifyUrl = `${this.spotifyUrl.trim()}, ${playlistId}`;
-      const result = this.convertToArray(this.spotifyUrl);
-      this.spotifyUrls = result;
-    } else {
-      this.spotifyUrl = playlistId;
-      const result = this.convertToArray(this.spotifyUrl);
-      this.spotifyUrls = result;
-    }
-
-    console.log('Playlist IDs:', this.spotifyUrl);
-  }
-
-  convertToArray(input: string): string[] {
-    return input
-      .split(",")               // split by commas
-      .map(item => item.trim()) // remove spaces around each item
-      .filter(item => item !== ""); // remove empty strings (if any)
-  }
-
-
-  onSpotifyUrlPaste(event: ClipboardEvent) {
-    event.preventDefault();
-
-    const pastedText = event.clipboardData?.getData('text/plain') || '';
-    const urls = pastedText.split(/\s+/); // split by spaces/newlines
-
-    const spotifyPlaylistPattern = /^https:\/\/open\.spotify\.com\/artist\/([A-Za-z0-9]+)(\?.*)?$/;
-
-    urls.forEach((url) => {
-      const match = spotifyPlaylistPattern.exec(url.trim());
-      if (!match) {
-        console.warn('Invalid Spotify Artist URL:', url);
-        return;
-      }
-
-      const playlistId = match[1]; // extracted ID
-
-      if (this.spotifyUrl && this.spotifyUrl.trim() !== '') {
-        this.spotifyUrl = `${this.spotifyUrl.trim()}, ${playlistId}`;
-        const result = this.convertToArray(this.spotifyUrl);
-        this.spotifyUrls = result;
-      } else {
-
-        this.spotifyUrl = playlistId;
-        const result = this.convertToArray(this.spotifyUrl);
-        this.spotifyUrls = result;
-      }
-    });
-
-    console.log('Playlist IDs after paste:', this.spotifyUrl);
-  }
 
   saveNewLicense() {
     if (this.newLicenseForm.invalid) {
@@ -284,4 +181,10 @@ export class GroupListModalComponent implements OnInit {
       this.closeModal();
     });
   }
+
+
+  closeModal(): void {
+    this.dialogRef.close();
+  }
+
 }

@@ -18,6 +18,8 @@ import { MessageService } from '../../../../services/message.service';
 import { ConfirmationModalComponent } from '../../../confirmationmodal/confirmationmodal.component';
 import { UsersService } from '../../../../services/users.service';
 import { LicensesService } from '../../../../services/licenses.service';
+import { UnassignConfirmationModalComponent } from '../../generics/unassign-confirmation-modal/unassign-confirmation-modal.component';
+import { LicensesActiveListModalComponent } from '../licenses-active-list-modal/licenses-active-list-modal.component';
 export interface DialogData {
   devicesList: string[];
 }
@@ -36,20 +38,20 @@ export interface DialogData {
     CommonModule],
   templateUrl: './devicesettingsmodal.component.html',
   styleUrls: ['./devicesettingsmodal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeviceSettingsModalComponent implements OnInit {
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   private fb = inject(UntypedFormBuilder);
   deviceInfoForm!: UntypedFormGroup;
   readonly dialogRef = inject(MatDialogRef);
   readonly data = inject<any>(MAT_DIALOG_DATA);
+  readonly device = this.data.id;
   readonly deviceId = this.data.deviceId;
   readonly deviceName = this.data.currentName;
   readonly ownerId = this.data.ownerId;
   devicesService = inject(DevicesService);
-  spotifyUrl: any = '';
-  spotifyUrls: any = '';
   newOwnerId: number = this.ownerId ?? 0;
+  gotLicenseId: any = 0;
   readonly dialog = inject(MatDialog);
   constructor(
     private sanitizer: DomSanitizer,
@@ -64,9 +66,10 @@ export class DeviceSettingsModalComponent implements OnInit {
     this.devicesService.getListOfPlayingPlaylist(this.deviceId);
     this.devicesService.getListOfPlayingArtist(this.deviceId);
     this.usersService.getAllActiveUsers();
-    this.licensesService.getLicenseByDeviceId(this.deviceId);
+    this.licensesService.getLicenseByDeviceId(this.device);
     this.licensesService.deviceLicenseInfo$.subscribe(info => {
       if (info) {
+        this.gotLicenseId = info.id;
         this.deviceInfoForm = this.fb.group({
           statusName: [{ value: info.statusName, disabled: true }, Validators.required],
           typeName: [{ value: info.typeName, disabled: true }, Validators.required],
@@ -82,6 +85,29 @@ export class DeviceSettingsModalComponent implements OnInit {
       }
     });
 
+  }
+
+  assignDevice() {
+    const payload = {
+      licenseInfo: {
+        "deviceId": this.device,
+        "licenseId": 0,
+        "userId": this.userInfo.id
+      },
+    };
+
+    const dialogRef = this.dialog.open(LicensesActiveListModalComponent, {
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
+      height: '80vh', // to override default 80vw
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+      }
+    });
   }
 
   getSpotifyEmbedUrlPlaylist(playlist: string): SafeResourceUrl {
@@ -112,7 +138,7 @@ export class DeviceSettingsModalComponent implements OnInit {
       width: '40vw', // or '90vw'
       maxWidth: '40vw', // to override default 80vw
       height: "250px",
-      data: { message: "¿Estás seguro de que deseas borrar a este artista que está pendiente para reproducir?" },
+      data: { message: "¿Estás seguro de que deseas eliminar a este artista que está pendiente para reproducir?" },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -134,7 +160,7 @@ export class DeviceSettingsModalComponent implements OnInit {
       width: '40vw', // or '90vw'
       maxWidth: '40vw', // to override default 80vw
       height: "250px",
-      data: { message: "¿Estás seguro de que deseas borrar a esta playlist que está pendiente para reproducir?" },
+      data: { message: "¿Estás seguro de que deseas eliminar a esta playlist que está pendiente para reproducir?" },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -146,6 +172,31 @@ export class DeviceSettingsModalComponent implements OnInit {
       }
     });
 
+  }
+
+
+
+  unAssignDevice() {
+
+    const payload = {
+      licenseInfo: {
+        "deviceId": this.device,
+        "licenseId": this.gotLicenseId,
+        "userId": this.userInfo.id
+      },
+    };
+
+    const dialogRef = this.dialog.open(UnassignConfirmationModalComponent, {
+      width: '50vw', // or '90vw'
+      maxWidth: '50vw', // to override default 80vw
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+      }
+    });
   }
 
 

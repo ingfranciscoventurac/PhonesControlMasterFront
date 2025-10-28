@@ -126,6 +126,26 @@ export class CustomTableComponent implements OnDestroy, OnInit, OnChanges {
 
 
 
+  selectRow(row: any) {
+    if (this.hasRadiobox) {
+      // if you prefer comparing by id: this.form.get('radioInput').setValue(row.id)
+      this.form.get('radioInput')!.setValue(row);
+      this.onRadioChange(row); // keep current behavior
+    }
+
+  }
+
+  // Helper used by template for highlighting
+  isSelected(row: any) {
+    if (this.hasRadiobox) {
+      const current = this.form.get('radioInput')!.value;
+      // If using object identity:
+      return current === row;
+    }
+    return;
+  }
+
+
   onRadioChange(data: any) {
     this.rowSelected.emit(data);
   }

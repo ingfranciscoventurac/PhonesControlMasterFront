@@ -5,18 +5,11 @@ import { FormsModule } from '@angular/forms';
 import { TracksService } from '../../core/services/tracks.service';
 import { DevicesService } from '../../core/services/devices.service';
 import { CommonModule } from '@angular/common';
-import { MatDialogModule } from '@angular/material/dialog';
 
 import { ChangeDetectionStrategy, inject, model, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
-  MAT_DIALOG_DATA,
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -87,12 +80,12 @@ export class DevicesComponent implements OnInit {
     }
   }
 
-  openDeviceSettings(deviceId: number | string, currentName: string, ownerId: number) {
+  openDeviceSettings(deviceId: number | string, currentName: string, ownerId: number, id: number | string) {
     const dialogRef = this.dialog.open(DeviceSettingsModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw',
+      maxWidth: '80vw',
       height: "600px",
-      data: { deviceId: deviceId, currentName: currentName, ownerId: ownerId },
+      data: { deviceId: deviceId, currentName: currentName, ownerId: ownerId, id: id, },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -105,8 +98,8 @@ export class DevicesComponent implements OnInit {
 
   openNoAssignedDevices(deviceId: number | string, currentName: string) {
     const dialogRef = this.dialog.open(ActiveUsersModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw',
+      maxWidth: '80vw',
       height: "600px",
       data: { devicesList: [deviceId], multi: false },
 
@@ -122,8 +115,8 @@ export class DevicesComponent implements OnInit {
 
   openAssignSeveralDevices() {
     const dialogRef = this.dialog.open(ActiveUsersModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw',
+      maxWidth: '80vw',
       height: "600px",
       data: { devicesList: this.selectedDevices, multi: true },
 
@@ -155,7 +148,6 @@ export class DevicesComponent implements OnInit {
       this.deviceSettingsOpened = value;
       this.selectedDevices.push(value);
     } else {
-      // Remove value if unchecked
       this.selectedDevices = this.selectedDevices.filter(v => v !== value);
     }
     console.log(this.selectedDevices);
@@ -167,17 +159,15 @@ export class DevicesComponent implements OnInit {
       if (!devices || devices.length === 0) return;
 
       if (this.allSelected) {
-        // Uncheck all
         this.selectedDevices = [];
         this.allSelected = false;
       } else {
-        // Select all
         this.selectedDevices = devices.map((d: any) => d.deviceId);
         this.allSelected = true;
       }
 
       console.log('Current selected devices:', this.selectedDevices);
-    }).unsubscribe(); // prevent memory leaks
+    }).unsubscribe();
   }
 
 

@@ -21,10 +21,6 @@ import { LicenseGroupService } from '../../../../services/licenseGroup.service';
 import { LicenseTypeService } from '../../../../services/licenseType.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LicensesService } from '../../../../services/licenses.service';
-import { CustomTableComponent } from '../../../custom-table/custom-table.component';
-import { NewLicenseGroupModalComponent } from '../new-license-group-modal/newLicenseGroupModal.component';
-import { EditLicenseGroupModalComponent } from '../edit-license-group-modal/editLicenseGroupModal.component';
-import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
 export interface DialogData {
   devicesList: string[];
 }
@@ -33,145 +29,47 @@ export interface DialogData {
  * @title Dialog Overview
  */
 @Component({
-  selector: 'GroupListModal',
+  selector: 'EditLicenseModal',
   providers: [provideNativeDateAdapter()],
   imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    CustomTableComponent,
     MatButtonModule,
     MatDatepickerModule,
     MatFormFieldModule, MatInputModule, MatDatepickerModule],
-  templateUrl: './groupListModal.component.html',
+  templateUrl: './editLicenseModal.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupListModalComponent implements OnInit {
-  readonly dialog = inject(MatDialog);
+export class EditLicenseModalComponent implements OnInit {
   private fb = inject(UntypedFormBuilder);
-  selectedRow: any;
   private licensesService = inject(LicensesService);
   public licenseGroupService = inject(LicenseGroupService);
   public licenseTypeService = inject(LicenseTypeService);
   readonly dialogRef = inject(MatDialogRef);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
-  readonly devices = model(this.data.devicesList);
+  readonly data = inject<any>(MAT_DIALOG_DATA);
+  readonly licenseInfo = this.data.licenseInfo;
   devicesService = inject(DevicesService);
   spotifyUrl: any = '';
   spotifyUrls: any = '';
-  newLicenseForm!: UntypedFormGroup;
-
-  columns = [
-    { variableName: 'id', headerName: 'Id', dataType: 'string' },
-    { variableName: 'name', headerName: 'Nombre', dataType: 'string' },
-    { variableName: 'typeName', headerName: 'Tipo', dataType: 'string' },
-    { variableName: 'statusName', headerName: 'Estatus', dataType: 'status' },
-    { variableName: 'purchaseDate', headerName: 'Fecha de Compra', dataType: 'date' },
-    { variableName: 'warrantyExpirationDate', headerName: 'Expiración de Garantía', dataType: 'date' },
-  ];
-
-
-
-
+  editLicenseForm!: UntypedFormGroup;
   constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.newLicenseForm = this.fb.group({
-      groupId: [{ value: "", disabled: false }, Validators.required],
-      typeId: [{ value: "", disabled: false }, Validators.required],
-      email: [{ value: "", disabled: false }, Validators.required],
-      password: [{ value: "", disabled: false }, Validators.required],
-      emailPassword: [{ value: "", disabled: false }, Validators.required],
-      expirationDate: [{ value: "", disabled: false }, Validators.required],
-      family: [{ value: "", disabled: false }, Validators.required],
+    this.editLicenseForm = this.fb.group({
+      groupId: [{ value: this.licenseInfo.groupId, disabled: false }, Validators.required],
+      id: [{ value: this.licenseInfo.id, disabled: false }, Validators.required],
+      typeId: [{ value: this.licenseInfo.typeId, disabled: false }, Validators.required],
+      email: [{ value: this.licenseInfo.email, disabled: false }, Validators.required],
+      password: [{ value: this.licenseInfo.password, disabled: false }, Validators.required],
+      emailPassword: [{ value: this.licenseInfo.emailPassword, disabled: false }, Validators.required],
+      expirationDate: [{ value: this.licenseInfo.expirationDate, disabled: false }, Validators.required],
+      family: [{ value: this.licenseInfo.family, disabled: false }, Validators.required],
     });
-
-    this.newLicenseForm.get('expirationDate')?.valueChanges.subscribe((value) => {
-      if (value instanceof Date) {
-        const isoString = value.toISOString();
-        this.newLicenseForm.get('expirationDate')?.setValue(isoString, { emitEvent: false });
-      }
-    });
-
   }
-
-  rowSelected(data: any) {
-    // if (formName) {
-    //   this[formName!]?.patchValue({
-    //     [formVariable]: data
-    //   });
-    // } else {
-    this.selectedRow = data;
-    console.log(this.selectedRow)
-    // }
-  }
-
-  getLicenseGroupPagination = (pagination: any) => {
-    this.licenseGroupService.getLicenseGroupPagination(pagination);
-
-  };
 
   closeModal(): void {
     this.dialogRef.close();
   }
-
-  openNewLicenseGroupModal() {
-    const dialogRef = this.dialog.open(NewLicenseGroupModalComponent, {
-      width: '80vw', // or '90vw'
-      maxWidth: '80vw', // to override default 80vw
-      height: "600px",
-      data: { devicesList: null, multi: true },
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
-    });
-  }
-
-  openEditLicenseGroupModal(data: any) {
-    const dialogRef = this.dialog.open(EditLicenseGroupModalComponent, {
-      width: '80vw', // or '90vw'
-      maxWidth: '80vw', // to override default 80vw
-      height: "600px",
-      data: { licenseGroupInfo: data, multi: true },
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
-    });
-  }
-
-
-  openDeleteLicenseGroupModal(data: any) {
-    const payload = {
-      licenseGroupInfo: {
-        ...data,
-        deleteType: "licenseGroup",
-        multi: true,
-      },
-    };
-    console.log(payload);
-    const dialogRef = this.dialog.open(DeleteConfirmationModalComponent, {
-      width: '80vw', // or '90vw'
-      maxWidth: '80vw', // to override default 80vw
-      data: payload,
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
-    });
-  }
-
 
   playOnDevices() {
     if (this.data.devicesList.length == 0 || this.spotifyUrl.length == 0) {
@@ -260,10 +158,10 @@ export class GroupListModalComponent implements OnInit {
   }
 
   saveNewLicense() {
-    if (this.newLicenseForm.invalid) {
+    if (this.editLicenseForm.invalid) {
       return;
     }
-    const formValue = this.newLicenseForm.value;
+    const formValue = this.editLicenseForm.value;
     const expirationDate = new Date(formValue.expirationDate); // 👈 always returns a Date
 
     const formattedDate = isNaN(expirationDate.getTime())
@@ -271,16 +169,16 @@ export class GroupListModalComponent implements OnInit {
       : expirationDate.toISOString();
 
     const newLicense = {
-      "groupId": Number(this.newLicenseForm.get("groupId")?.value),
-      "typeId": Number(this.newLicenseForm.get("typeId")?.value),
-      "email": this.newLicenseForm.get("email")?.value,
-      "password": this.newLicenseForm.get("password")?.value,
-      "emailPassword": this.newLicenseForm.get("emailPassword")?.value,
+      "id": Number(this.editLicenseForm.get("id")?.value),
+      "groupId": Number(this.editLicenseForm.get("groupId")?.value),
+      "typeId": Number(this.editLicenseForm.get("typeId")?.value),
+      "email": this.editLicenseForm.get("email")?.value,
+      "password": this.editLicenseForm.get("password")?.value,
+      "emailPassword": this.editLicenseForm.get("emailPassword")?.value,
       "expirationDate": formattedDate,
-      "family": Number(this.newLicenseForm.get("family")?.value),
+      "family": Number(this.editLicenseForm.get("family")?.value),
     }
-    this.licensesService.addNewLicense(newLicense).then(response => {
-      console.log(response);
+    this.licensesService.editNewLicense(newLicense).then(response => {
       this.closeModal();
     });
   }

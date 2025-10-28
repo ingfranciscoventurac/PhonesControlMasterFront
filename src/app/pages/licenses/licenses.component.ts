@@ -7,9 +7,12 @@ import { LicensesService } from '../../core/services/licenses.service';
 import { LicenseGroupService } from '../../core/services/licenseGroup.service';
 import { LicenseTypeService } from '../../core/services/licenseType.service';
 import { NewLicenseModalComponent } from '../../core/components/modals/licenses/new-license-modal/newLicenseModal.component';
-import { NewLicenseGroupModalComponent } from '../../core/components/modals/licenses/new-license-group-modal/newLicenseGroupModal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupListModalComponent } from '../../core/components/modals/licenses/group-list-modal/groupListModal.component';
+import { EditLicenseModalComponent } from '../../core/components/modals/licenses/edit-license-modal/editLicenseModal.component';
+import { DeleteConfirmationModalComponent } from '../../core/components/modals/generics/delete-confirmation-modal/delete-confirmation-modal.component';
+import { LicensesListModalComponent } from '../../core/components/modals/licenses/licenses-list-modal/licenses-list-modal.component';
+import { UnassignConfirmationModalComponent } from '../../core/components/modals/generics/unassign-confirmation-modal/unassign-confirmation-modal.component';
 @Component({
   selector: 'app-licenses',
   imports: [FormsModule, CommonModule, CustomTableComponent],
@@ -21,6 +24,7 @@ export class LicensesComponent implements OnInit {
   selectedDevices: string[] = [];
   devices: any = undefined;
   deviceSettingsOpened: any;
+  selectedRow: any;
   readonly dialog = inject(MatDialog);
   permissions: any;
   customPagination: any = {
@@ -77,10 +81,27 @@ export class LicensesComponent implements OnInit {
     this.customPagination = transform as any;
   }
 
+  openLicenseListModal() {
+    const dialogRef = this.dialog.open(LicensesListModalComponent, {
+      width: '90vw', // or '90vw'
+      maxWidth: '90vw', // to override default 80vw
+      height: "90vh",
+      data: { devicesList: null, multi: true },
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+
+      }
+    });
+  }
+
   openNewLicenseModal() {
     const dialogRef = this.dialog.open(NewLicenseModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
       height: "600px",
       data: { devicesList: null, multi: true },
 
@@ -94,12 +115,12 @@ export class LicensesComponent implements OnInit {
     });
   }
 
-  openNewLicenseGroupModal() {
-    const dialogRef = this.dialog.open(NewLicenseGroupModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+  openEditLicenseModal() {
+    const dialogRef = this.dialog.open(EditLicenseModalComponent, {
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
       height: "600px",
-      data: { devicesList: null, multi: true },
+      data: { licenseInfo: this.selectedRow, multi: true },
 
     });
 
@@ -110,11 +131,51 @@ export class LicensesComponent implements OnInit {
       }
     });
   }
+
+  openUnassignDeviceLicenseModal() {
+
+    const payload = {
+      licenseInfo: {
+        "deviceId": this.selectedRow?.id,
+        "licenseId": this.selectedRow?.licenseId,
+        "userId": this.userInfo.id
+      },
+    };
+    console.log(payload);
+
+    const dialogRef = this.dialog.open(UnassignConfirmationModalComponent, {
+      width: '50vw', // or '90vw'
+      maxWidth: '50vw', // to override default 80vw
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+
+      }
+    });
+  }
+
+  rowSelected(data: any) {
+    // if (formName) {
+    //   this[formName!]?.patchValue({
+    //     [formVariable]: data
+    //   });
+    // } else {
+    this.selectedRow = data;
+    console.log(this.selectedRow)
+    // }
+  }
+
+
 
   openGroupListModal() {
+
+
     const dialogRef = this.dialog.open(GroupListModalComponent, {
-      width: '60vw', // or '90vw'
-      maxWidth: '60vw', // to override default 80vw
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
       height: "600px",
       data: { devicesList: null, multi: true },
 
