@@ -78,16 +78,6 @@ export class NewDeviceModalComponent implements OnInit {
       return;
     }
 
-
-    this.newDeviceForm = this.fb.group({
-      userId: [{ value: this.userInfo.id, disabled: false }, Validators.required],
-      id: [{ value: "", disabled: false }, Validators.required],
-      name: [{ value: "", disabled: false }, Validators.required],
-      ip: [{ value: "", disabled: false }],
-      port: [{ value: "", disabled: false }],
-    });
-
-
     const newDevice = {
       "userId": this.userInfo.id,
       "id": this.newDeviceForm.get("id")?.value,
