@@ -19,8 +19,8 @@
   /* default scale (can be overridden via [scale] input) */
   --phone-scale: 1;
 
-  --phone-w: calc(220px * var(--phone-scale));
-  --phone-h: calc(430px * var(--phone-scale));
+  --phone-w: calc(250px * var(--phone-scale));
+  --phone-h: calc(500px * var(--phone-scale));
   --bezel: 14px;
   --screen-radius: 28px;
   --accent-1: #ffffff;
@@ -177,7 +177,7 @@
 
 .controls2 {
   position: absolute;
-  left: 130px;
+  left: 160px;
   bottom: 22px;
   display: flex;
   gap: 18px;

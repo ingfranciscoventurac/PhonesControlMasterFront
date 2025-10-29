@@ -32,16 +32,25 @@
                             <div class="status-dots">● ●</div>
 
                             <div class="top-code" aria-hidden="true">
-                                <div class="id">#{{devices.deviceId}}</div>
-                                <div class="pin">{{devices.name}}</div>
-                                <div class="id">#{{devices.typeName}}</div>
-                                <div class="id">#{{devices.email}}</div>
-                            </div>
+                                <div class="font-bold text-4xl text-white">{{devices.deviceId}}</div>
+                                <div class="font-bold text-xl text-black">{{devices.name}}</div>
+                                @if(devices.typeName==""){
+                                <div class="font-bold text-xs my-2 p-2 rounded text-white bg-black">
+                                    {{ "Sin Licencia" }}
+                                </div>
+                                }@else {
+                                <div class="font-bold text-xl mb-2" [ngClass]="{
+                                                               'text-green-600': devices.typeName === 'Spotify',
+                                                               'text-red-600'  : devices.typeName === 'Apple'
+                                                             }">
+                                    {{ devices.typeName }}
+                                </div>
+                                }
+                                <div class="font-normal text-xs text-black max-w-xs break-all"
+                                    [attr.title]="devices.email">
+                                    {{ devices.email }}
+                                </div>
 
-                            <div class="expire" aria-hidden="true">
-                                Expiración De Cuenta
-                                <small>{{
-                                    devices.expirationDate | date: 'short' }}</small>
                             </div>
 
                             <div class="controls"
@@ -81,18 +90,26 @@
                             <div class="status-dots">● ●</div>
 
                             <div class="top-code" aria-hidden="true">
-                                <div class="id">#{{devices.deviceId}}</div>
-                                <div class="pin">{{devices.name}}</div>
-                                <div class="id">#{{devices.typeName}}</div>
-                                <div class="id">#{{devices.email}}</div>
-                            </div>
+                                <div class="font-bold text-4xl text-white">{{devices.deviceId}}</div>
+                                <div class="font-bold text-xl text-black">{{devices.name}}</div>
+                                @if(devices.typeName==""){
+                                <div class="font-bold text-xs my-2 p-2 rounded text-white bg-black">
+                                    {{ "Sin Licencia" }}
+                                </div>
+                                }@else {
+                                <div class="font-bold text-xl mb-2" [ngClass]="{
+                                                               'text-green-600': devices.typeName === 'Spotify',
+                                                               'text-red-600'  : devices.typeName === 'Apple'
+                                                             }">
+                                    {{ devices.typeName }}
+                                </div>
+                                }
+                                <div class="font-normal text-xs text-black max-w-xs break-all"
+                                    [attr.title]="devices.email">
+                                    {{ devices.email }}
+                                </div>
 
-                            <div class="expire" aria-hidden="true">
-                                Expiración De Cuenta
-                                <small>{{
-                                    devices.expirationDate | date: 'short' }}</small>
                             </div>
-
                             <div class="controls" (click)="openNoAssignedDevices(devices.deviceId, devices.name)">
                                 <div class="btn-circle" title="Settings">
                                     <span class="gear"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -146,7 +163,11 @@
                                     {{ devices.typeName }}
                                 </div>
                                 }
-                                <div class="font-normal text-md text-black">{{devices.email}}</div>
+                                <div class="font-normal text-xs text-black max-w-xs break-all"
+                                    [attr.title]="devices.email">
+                                    {{ devices.email }}
+                                </div>
+
                             </div>
 
                             <div class="expire font-bold text-xl text-black" aria-hidden="true">
