@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class DevicesService {
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
 
   constructor() { }
 
@@ -21,7 +22,7 @@ export class DevicesService {
     this.devicesSubject.next([]);
     await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Device/Pagination",
       {
-        "userId": 0,
+        "userId": this.userInfo.id,
         "first": 0,
         "rows": 200,
         "sortField": "id",
@@ -36,6 +37,7 @@ export class DevicesService {
     this.devicesSubject.next([]);
     await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Device/PaginationAllDevices",
       {
+        "userId": this.userInfo.id,
         "first": 0,
         "rows": 200,
         "sortField": "id",

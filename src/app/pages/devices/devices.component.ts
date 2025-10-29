@@ -27,7 +27,6 @@ import { NewDeviceModalComponent } from '../../core/components/modals/devices/ne
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DevicesComponent implements OnInit {
-
   selectedDevices: string[] = [];
   devices: any = undefined;
   deviceSettingsOpened: any;

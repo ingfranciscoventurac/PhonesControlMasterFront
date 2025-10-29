@@ -37,6 +37,7 @@ export interface DialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddArtistModalComponent {
+
   readonly dialogRef = inject(MatDialogRef);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
   readonly devices = model(this.data.devicesList);
