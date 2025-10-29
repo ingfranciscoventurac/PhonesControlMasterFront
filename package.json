@@ -19,7 +19,6 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
-    "@mikeyrg/custom-input": "^0.0.1",
     "@supabase/supabase-js": "^2.54.0",
     "@tailwindcss/postcss": "^4.1.11",
     "axios": "^1.11.0",
