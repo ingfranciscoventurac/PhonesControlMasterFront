@@ -106,6 +106,12 @@ export class DevicesService {
       , false);
   }
 
+
+  async deleteDevice(deviceId: string): Promise<void> {
+    await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/Device/Delete?id=${deviceId}`
+      , false);
+  }
+
   async deletePendingArtist(artistId: string): Promise<void> {
     await DELETE_METHOD(`https://pcapi.valoracatalog.com/api/v1/Artist/ById?id=${artistId}`
       , false);

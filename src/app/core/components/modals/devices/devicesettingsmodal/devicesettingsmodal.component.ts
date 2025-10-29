@@ -20,6 +20,7 @@ import { UsersService } from '../../../../services/users.service';
 import { LicensesService } from '../../../../services/licenses.service';
 import { UnassignConfirmationModalComponent } from '../../generics/unassign-confirmation-modal/unassign-confirmation-modal.component';
 import { LicensesActiveListModalComponent } from '../licenses-active-list-modal/licenses-active-list-modal.component';
+import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
 export interface DialogData {
   devicesList: string[];
 }
@@ -100,6 +101,26 @@ export class DeviceSettingsModalComponent implements OnInit {
       width: '80vw', // or '90vw'
       maxWidth: '80vw', // to override default 80vw
       height: '80vh', // to override default 80vw
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+      }
+    });
+  }
+  deleteDevice() {
+
+
+    const payload = {
+      licenseGroupInfo: {
+        "deviceId": this.device,
+        "deleteType": "device",
+      },
+    };
+
+    const dialogRef = this.dialog.open(DeleteConfirmationModalComponent, {
       data: payload,
     });
 

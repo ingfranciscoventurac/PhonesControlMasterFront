@@ -49,14 +49,10 @@ export class DeleteConfirmationModalComponent implements OnInit {
   devicesService = inject(DevicesService);
   spotifyUrl: any = '';
   spotifyUrls: any = '';
-  deleteLicenseForm!: UntypedFormGroup;
   constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.deleteLicenseForm = this.fb.group({
-      id: [{ value: this.licenseGroupInfo.id, disabled: false }, Validators.required],
-      deleteType: [{ value: this.licenseGroupInfo.deleteType, disabled: false }, Validators.required],
-    });
+    console.log(this.licenseGroupInfo.deviceId);
   }
 
   closeModal(): void {
@@ -65,11 +61,8 @@ export class DeleteConfirmationModalComponent implements OnInit {
 
 
   confirmDeleteLicenseGroup() {
-    console.log(this.deleteLicenseForm.value);
-    if (this.deleteLicenseForm.invalid) {
-      return;
-    }
 
+    if (!this.licenseGroupInfo?.deleteType) { return };
     switch (this.licenseGroupInfo.deleteType) {
 
       case "licenseGroup":
@@ -81,6 +74,12 @@ export class DeleteConfirmationModalComponent implements OnInit {
       case "license":
         this.licensesService.deleteLicense(this.licenseGroupInfo.id).then((response: any) => {
           this.messageService.showMessage("Grupo de licencias eliminado.", "success");
+          this.closeModal();
+        });
+        return;
+      case "device":
+        this.devicesService.deleteDevice(this.licenseGroupInfo.deviceId).then((response: any) => {
+          this.messageService.showMessage("Dispositivo eliminado.", "success");
           this.closeModal();
         });
         return;

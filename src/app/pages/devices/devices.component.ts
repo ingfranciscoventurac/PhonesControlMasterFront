@@ -12,7 +12,7 @@ import {
   MatDialog,
 } from '@angular/material/dialog';
 
-import { moveItemInArray, CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
+import { moveItemInArray, CdkDrag, CdkDragPreview, CdkDropList, CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AddplaylistmodalComponent } from '../../core/components/addplaylistmodal/addplaylistmodal.component';
@@ -23,7 +23,7 @@ import { NewDeviceModalComponent } from '../../core/components/modals/devices/ne
 
 @Component({
   selector: 'app-devices',
-  imports: [DragDropModule, FormsModule, CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [CdkDragPreview, DragDropModule, CdkDropList, CdkDrag, FormsModule, CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
