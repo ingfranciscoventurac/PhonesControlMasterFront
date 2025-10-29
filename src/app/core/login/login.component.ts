@@ -41,13 +41,13 @@ export class LoginComponent implements OnInit {
         delete data.isSuccess;
         localStorage.setItem("userInfo", JSON.stringify(data));
         window.location.href =
-          "https://spotify-auth-server-delta.vercel.app/api/login";
+          "https://spotify-center-server.vercel.app/api/login";
       } else {
         const data = response as any;
         delete data.isSuccess;
         localStorage.setItem("userInfo", JSON.stringify(data));
         window.location.href =
-          "https://spotify-auth-server-delta.vercel.app/api/login";
+          "https://spotify-center-server.vercel.app/api/login";
       }
 
     })

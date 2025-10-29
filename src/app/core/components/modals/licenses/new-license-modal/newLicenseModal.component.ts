@@ -66,12 +66,6 @@ export class NewLicenseModalComponent implements OnInit {
       family: [{ value: "", disabled: false }, Validators.required],
     });
 
-    this.newLicenseForm.get('expirationDate')?.valueChanges.subscribe((value) => {
-      if (value instanceof Date) {
-        const isoString = value.toISOString();
-        this.newLicenseForm.get('expirationDate')?.setValue(isoString, { emitEvent: false });
-      }
-    });
 
   }
 

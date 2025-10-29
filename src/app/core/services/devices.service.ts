@@ -54,6 +54,12 @@ export class DevicesService {
       }, true)
   }
 
+  async addNewDevice(newDevice: any): Promise<void> {
+    await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Device/Add",
+      newDevice, true)
+  }
+
+
   async playArtist(devices: any[], artists: any[]): Promise<void> {
     await POST_METHOD("https://pcapi.valoracatalog.com/api/v1/Artist/ToDevices",
       {

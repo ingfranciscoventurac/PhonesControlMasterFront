@@ -17,6 +17,7 @@ import { AddplaylistmodalComponent } from '../../core/components/addplaylistmoda
 import { AddArtistModalComponent } from '../../core/components/addartistmodal/addartistmodal.component';
 import { DeviceSettingsModalComponent } from '../../core/components/modals/devices/devicesettingsmodal/devicesettingsmodal.component';
 import { ActiveUsersModalComponent } from '../../core/components/activeusersmodal/activeusers.component';
+import { NewDeviceModalComponent } from '../../core/components/modals/devices/new-device-modal/new-device-modal.component';
 
 @Component({
   selector: 'app-devices',
@@ -132,6 +133,19 @@ export class DevicesComponent implements OnInit {
 
   openArtistModal(): void {
     const dialogRef = this.dialog.open(AddArtistModalComponent, {
+      data: { devicesList: this.selectedDevices },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+        this.animal.set(result);
+      }
+    });
+  }
+
+  newDevice() {
+    const dialogRef = this.dialog.open(NewDeviceModalComponent, {
       data: { devicesList: this.selectedDevices },
     });
 
