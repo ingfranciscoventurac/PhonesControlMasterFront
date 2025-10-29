@@ -92,8 +92,8 @@ export class NewDeviceModalComponent implements OnInit {
       "userId": this.userInfo.id,
       "id": this.newDeviceForm.get("id")?.value,
       "name": this.newDeviceForm.get("name")?.value,
-      "ip": this.newDeviceForm.get("email")?.value,
-      "port": this.newDeviceForm.get("password")?.value,
+      "ip": this.newDeviceForm.get("ip")?.value,
+      "port": this.newDeviceForm.get("port")?.value,
     }
     this.devicesService.addNewDevice(newDevice).then(response => {
       console.log(response);
