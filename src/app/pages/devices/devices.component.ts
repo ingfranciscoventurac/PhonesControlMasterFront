@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   MatDialog,
 } from '@angular/material/dialog';
+
+import { moveItemInArray, CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AddplaylistmodalComponent } from '../../core/components/addplaylistmodal/addplaylistmodal.component';
@@ -21,7 +23,7 @@ import { NewDeviceModalComponent } from '../../core/components/modals/devices/ne
 
 @Component({
   selector: 'app-devices',
-  imports: [FormsModule, CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [DragDropModule, FormsModule, CommonModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
   templateUrl: './devices.component.html',
   styleUrls: ['./devices.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +44,12 @@ export class DevicesComponent implements OnInit {
     } else {
       this.devicesService.getDevices();
     }
+  }
+
+  drop(event: CdkDragDrop<any[]>) {
+    const devices = [...this.devicesService.devicesValue]; // get the current array
+    moveItemInArray(devices, event.previousIndex, event.currentIndex); // ✅ correct reposition logic
+    this.devicesService.updateDevices(devices); // push new order
   }
 
   allSelected: boolean = false;

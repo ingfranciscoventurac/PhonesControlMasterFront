@@ -9,6 +9,12 @@ export class DevicesService {
 
   constructor() { }
 
+  /** Returns the current value of devices synchronously */
+  get devicesValue(): any[] {
+    return this.devicesSubject.value || [];
+  }
+
+
   private devicesSubject = new BehaviorSubject<any>(undefined);
   devices$: Observable<any> = this.devicesSubject.asObservable();
 
@@ -113,5 +119,9 @@ export class DevicesService {
         "userId": userId
       }
       , false);
+  }
+  updateDevices(newDevices: any[]): void {
+    console.log("🚀 ~ DevicesService ~ updateDevices ~ newDevices:", newDevices)
+    this.devicesSubject.next([...newDevices]);
   }
 }

@@ -15,11 +15,12 @@
             </div>
 
         </div>
-        <div class="devicelist flex-1">
+        <div class="devicelist flex-1" cdkDropListOrientation="mixed" cdkDropList
+            [cdkDropListData]="devicesService.devicesValue" (cdkDropListDropped)="drop($event)">
             @if(permissions.p5){
             @for (devices of devicesService.devices$ | async; track devices.id) {
             @if(devices.ownerId){
-            <div class="relative">
+            <div class="relative" cdkDrag>
                 <input type="checkbox" class="peer sr-only" [id]="`chk-${devices.deviceId}`" [value]="devices.deviceId"
                     [checked]="selectedDevices.includes(devices.deviceId)"
                     (change)="onCheckboxChange($event, devices.deviceId)">
@@ -242,7 +243,7 @@
                 </div>
 
             </div>
-            }@else {<div class="relative opacity-25">
+            }@else {<div class="relative opacity-25" cdkDrag>
                 <input type="checkbox" class="peer sr-only" [id]="`chk-${devices.deviceId}`" [value]="devices.deviceId"
                     [checked]="selectedDevices.includes(devices.deviceId)"
                     (change)="onCheckboxChange($event, devices.deviceId)">
@@ -466,7 +467,7 @@
             }
             }@else {
             @for (devices of devicesService.devices$ | async; track devices.id) {
-            <div class="relative">
+            <div class="relative" cdkDrag>
                 <input type="checkbox" class="peer sr-only" [id]="`chk-${devices.deviceId}`" [value]="devices.deviceId"
                     [checked]="selectedDevices.includes(devices.deviceId)"
                     (change)="onCheckboxChange($event, devices.deviceId)">

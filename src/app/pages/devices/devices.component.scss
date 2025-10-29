@@ -12,6 +12,11 @@
 
 .devicelist {
   display: grid;
-  grid-template-columns: auto auto auto auto auto;
-  gap: 2rem;
+  width: 100%;
+  grid-template-columns: repeat(
+    5,
+    minmax(0, 200px)
+  ); /* max 200px, shrink if needed */
+  justify-content: space-between; /* spread items */
+  gap: 2rem; /* spacing between items */
 }
