@@ -14,10 +14,11 @@
 
     <div class="flex flex-col gap-4">
         <div class="flex-1">
-            <CustomTable #customTable [cols]="columns" [hasOverlayMenu]="true" [customFetchData]="getLicenses"
-                [data$]="licensesService.licensesActiveList$" [totalRecords$]="licensesService.totalRecordsActiveList$"
-                [isCustomPagination]="true" [additionalPaginationVariables]="customPagination"
-                [customFetchDataType]="'licensesActive'" (rowSelected)="rowSelected($event)">
+            <CustomTable #customTable [cols]="columns" [hasOverlayMenu]="true" [hasRadiobox]="true"
+                [customFetchData]="getLicenses" [data$]="licensesService.licensesActiveList$"
+                [totalRecords$]="licensesService.totalRecordsActiveList$" [isCustomPagination]="true"
+                [additionalPaginationVariables]="customPagination" [customFetchDataType]="'licensesActive'"
+                (rowSelected)="rowSelected($event)">
                 <ng-template #customMenuTemplate let-closeMenu="closeMenu">
                     <button class="text-primary" (click)="openEditLicenseModal(); closeMenu()">Editar</button>
                     <button class="text-danger" (click)="openDeleteLicenseModal(); closeMenu()">Eliminar</button>
