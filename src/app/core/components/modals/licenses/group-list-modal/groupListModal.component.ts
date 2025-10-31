@@ -45,6 +45,7 @@ export interface DialogData {
   templateUrl: './groupListModal.component.html',
 })
 export class GroupListModalComponent implements OnInit {
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   //COMPONENTS///////////////////////////////////////////////////////
   @ViewChild('customTable') customTable!: CustomTableComponent;
   //COMPONENTS///////////////////////////////////////////////////////
@@ -61,6 +62,15 @@ export class GroupListModalComponent implements OnInit {
   spotifyUrl: any = '';
   spotifyUrls: any = '';
   newLicenseForm!: UntypedFormGroup;
+
+  customPagination = {
+    first: 0,
+    rows: 10,
+    sortField: 'id',
+    sortOrder: 1,
+    filters: "",
+    userId: this.userInfo.id,
+  };
 
   columns = [
     { variableName: 'id', headerName: 'Id', dataType: 'string' },
