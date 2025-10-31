@@ -77,7 +77,7 @@ export class LicensesListModalComponent implements OnInit {
     { variableName: 'groupName', headerName: 'Grupo', dataType: 'string' },
     { variableName: 'email', headerName: 'Correo', dataType: 'string' },
     { variableName: 'expirationDate', headerName: 'Fecha De Expiración', dataType: 'dateWithHour' },
-    { variableName: 'family', headerName: 'Familiar', dataType: 'string' },
+    { variableName: 'family', headerName: '¿Es Plan Familiar?', dataType: 'family' },
     { variableName: 'statusName', headerName: 'Status', dataType: 'status' },
     // { variableName: 'daysLeftLicenseExpiration', headerName: 'Dias Restantes', dataType: 'status' },
     // { variableName: 'daysLeftWarrantyExpiration', headerName: 'Dias De Garantía', dataType: 'status' },

@@ -22,8 +22,6 @@ import { LicenseTypeService } from '../../../../services/licenseType.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LicensesService } from '../../../../services/licenses.service';
 import { CustomTableComponent } from '../../../custom-table/custom-table.component';
-import { NewLicenseGroupModalComponent } from '../new-license-group-modal/newLicenseGroupModal.component';
-import { EditLicenseGroupModalComponent } from '../edit-license-group-modal/editLicenseGroupModal.component';
 import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
 export interface DialogData {
   devicesList: string[];
@@ -106,39 +104,39 @@ export class GroupListModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  openNewLicenseGroupModal() {
-    const dialogRef = this.dialog.open(NewLicenseGroupModalComponent, {
-      width: '80vw', // or '90vw'
-      maxWidth: '80vw', // to override default 80vw
-      height: "600px",
-      data: { devicesList: null, multi: true },
+  // openNewLicenseGroupModal() {
+  //   const dialogRef = this.dialog.open(NewLicenseGroupModalComponent, {
+  //     width: '80vw', // or '90vw'
+  //     maxWidth: '80vw', // to override default 80vw
+  //     height: "600px",
+  //     data: { devicesList: null, multi: true },
 
-    });
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed');
+  //     if (result !== undefined) {
 
-      }
-    });
-  }
+  //     }
+  //   });
+  // }
 
-  openEditLicenseGroupModal(data: any) {
-    const dialogRef = this.dialog.open(EditLicenseGroupModalComponent, {
-      width: '80vw', // or '90vw'
-      maxWidth: '80vw', // to override default 80vw
-      height: "600px",
-      data: { licenseGroupInfo: data, multi: true },
+  // openEditLicenseGroupModal(data: any) {
+  //   const dialogRef = this.dialog.open(EditLicenseGroupModalComponent, {
+  //     width: '80vw', // or '90vw'
+  //     maxWidth: '80vw', // to override default 80vw
+  //     height: "600px",
+  //     data: { licenseGroupInfo: data, multi: true },
 
-    });
+  //   });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed');
+  //     if (result !== undefined) {
 
-      }
-    });
-  }
+  //     }
+  //   });
+  // }
 
 
   openDeleteLicenseGroupModal(data: any) {
