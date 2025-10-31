@@ -64,6 +64,11 @@ export class LicensesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadData();
+
+  }
+
+  loadData() {
     this.licenseTypeService.getLicenseType();
     this.licenseGroupService.getLicenseGroup(this.userInfo.id);
   }
@@ -169,6 +174,7 @@ export class LicensesComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.customTable.loadPage();
+      this.loadData();
     });
   }
 
