@@ -233,7 +233,7 @@ export class CustomTableComponent implements OnDestroy, OnInit, OnChanges {
         const customPaginationRequest: any = {
           first: (this.currentPage - 1) * this.pageSize,
           rows: this.pageSize,
-          sortField: this.sortedColumn == null ? 'id' : this.sortedColumn,
+          sortField: this.sortedColumn == null ? 'deviceId' : this.sortedColumn,
           sortOrder: sortOrderValue,
           filters: this.additionalPaginationVariables.filters,
           typeId: this.additionalPaginationVariables.typeId,

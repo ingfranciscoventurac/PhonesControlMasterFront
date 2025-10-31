@@ -35,7 +35,7 @@ export class LicensesComponent implements OnInit {
   customPagination: any = {
     first: 0,
     rows: 10,
-    sortField: 'createdDate',
+    sortField: 'deviceId',
     sortOrder: -1,
     filters: '',
     typeId: 0,
