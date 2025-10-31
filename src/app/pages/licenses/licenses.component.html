@@ -21,6 +21,7 @@
                 <label for="channelsInput" class="col-12 col-form-label text-lg-start">Tipo</label>
                 <select class="form-select me-2" style="width: 100%" [value]="customPagination.typeId"
                     id="channelsInput" (input)="sort($event,'typeId')">
+                    <option [value]="0">Todos</option>
                     @for (type of (licenseTypeService.licenseType$|async); track $index) {
                     <option [value]="type?.id">{{type.name}}</option>
                     }
