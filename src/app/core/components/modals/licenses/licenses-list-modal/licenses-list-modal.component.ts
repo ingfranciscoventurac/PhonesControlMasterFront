@@ -61,6 +61,15 @@ export class LicensesListModalComponent implements OnInit {
   readonly devices = model(this.data.devicesList);
   newLicenseForm!: UntypedFormGroup;
 
+  customPagination = {
+    first: 0,
+    rows: 10,
+    sortField: 'id',
+    sortOrder: 1,
+    filters: "",
+    userId: this.userInfo.id,
+  };
+
   columns = [
     { variableName: 'id', headerName: 'Id', dataType: 'string' },
     // { variableName: 'name', headerName: 'Nombre de Dispositivo', dataType: 'string' },
