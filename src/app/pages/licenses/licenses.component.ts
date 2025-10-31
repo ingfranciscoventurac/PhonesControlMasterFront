@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomTableComponent } from "../../core/components/custom-table/custom-table.component";
@@ -21,6 +21,11 @@ import { UnassignConfirmationModalComponent } from '../../core/components/modals
 })
 export class LicensesComponent implements OnInit {
   userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
+
+  //COMPONENTS///////////////////////////////////////////////////////
+  @ViewChild('customTable') customTable!: CustomTableComponent;
+  //COMPONENTS///////////////////////////////////////////////////////
+
   selectedDevices: string[] = [];
   devices: any = undefined;
   deviceSettingsOpened: any;
@@ -66,7 +71,6 @@ export class LicensesComponent implements OnInit {
   sort(event: any, variableName: string) {
     let inputValue = '';
     inputValue = (event.target as HTMLInputElement).value;
-
     const transform = {
       first: 0,
       rows: 10,
@@ -92,9 +96,7 @@ export class LicensesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
@@ -109,9 +111,7 @@ export class LicensesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
@@ -126,9 +126,7 @@ export class LicensesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
@@ -141,7 +139,6 @@ export class LicensesComponent implements OnInit {
         "userId": this.userInfo.id
       },
     };
-    console.log(payload);
 
     const dialogRef = this.dialog.open(UnassignConfirmationModalComponent, {
       width: '50vw', // or '90vw'
@@ -151,28 +148,16 @@ export class LicensesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
   rowSelected(data: any) {
-    // if (formName) {
-    //   this[formName!]?.patchValue({
-    //     [formVariable]: data
-    //   });
-    // } else {
     this.selectedRow = data;
-    console.log(this.selectedRow)
-    // }
+    console.log(this.selectedRow);
   }
 
-
-
   openGroupListModal() {
-
-
     const dialogRef = this.dialog.open(GroupListModalComponent, {
       width: '80vw', // or '90vw'
       maxWidth: '80vw', // to override default 80vw
@@ -183,9 +168,7 @@ export class LicensesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
@@ -202,7 +185,6 @@ export class LicensesComponent implements OnInit {
       userId: this.userInfo.id
     }
   }
-
 
   getLicenses = (pagination: PaginationRequest) => {
     this.licensesService.getLicenseWithDevices(pagination);

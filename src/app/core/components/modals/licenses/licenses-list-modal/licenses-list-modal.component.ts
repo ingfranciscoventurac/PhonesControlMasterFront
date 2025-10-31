@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
+import { Component, inject, model, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -11,14 +11,11 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MessageService } from '../../../../services/message.service';
 import { LicenseGroupService } from '../../../../services/licenseGroup.service';
 import { LicenseTypeService } from '../../../../services/licenseType.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LicensesService } from '../../../../services/licenses.service';
 import { CustomTableComponent } from '../../../custom-table/custom-table.component';
-import { NewLicenseGroupModalComponent } from '../new-license-group-modal/newLicenseGroupModal.component';
-import { EditLicenseGroupModalComponent } from '../edit-license-group-modal/editLicenseGroupModal.component';
 import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
 import { NewLicenseModalComponent } from '../new-license-modal/newLicenseModal.component';
 import { EditLicenseModalComponent } from '../edit-license-modal/editLicenseModal.component';
@@ -42,6 +39,12 @@ export interface DialogData {
   templateUrl: './licenses-list-modal.component.html',
 })
 export class LicensesListModalComponent implements OnInit {
+
+  //COMPONENTS///////////////////////////////////////////////////////
+  @ViewChild('customTable') customTable!: CustomTableComponent;
+  //COMPONENTS///////////////////////////////////////////////////////
+
+
   //DEPENDENCIES///////////////////////////////////////////////////////
   readonly dialog = inject(MatDialog);
   private fb = inject(UntypedFormBuilder);
@@ -72,7 +75,7 @@ export class LicensesListModalComponent implements OnInit {
   ];
   //VARIABELS///////////////////////////////////////////////////////
 
-  constructor(private messageService: MessageService) { }
+  constructor() { }
 
   ngOnInit(): void {
     this.newLicenseForm = this.fb.group({
@@ -107,9 +110,7 @@ export class LicensesListModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
@@ -124,9 +125,7 @@ export class LicensesListModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
 
@@ -149,39 +148,9 @@ export class LicensesListModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.customTable.loadPage();
     });
   }
-
-
-  saveNewLicense() {
-    if (this.newLicenseForm.invalid) {
-      return;
-    }
-    const formValue = this.newLicenseForm.value;
-    const expirationDate = new Date(formValue.expirationDate); // 👈 always returns a Date
-
-    const formattedDate = isNaN(expirationDate.getTime())
-      ? null
-      : expirationDate.toISOString();
-
-    const newLicense = {
-      "groupId": Number(this.newLicenseForm.get("groupId")?.value),
-      "typeId": Number(this.newLicenseForm.get("typeId")?.value),
-      "email": this.newLicenseForm.get("email")?.value,
-      "password": this.newLicenseForm.get("password")?.value,
-      "emailPassword": this.newLicenseForm.get("emailPassword")?.value,
-      "expirationDate": formattedDate,
-      "family": Number(this.newLicenseForm.get("family")?.value),
-    }
-    this.licensesService.addNewLicense(newLicense).then(response => {
-      console.log(response);
-      this.closeModal();
-    });
-  }
-
 
   closeModal(): void {
     this.dialogRef.close();

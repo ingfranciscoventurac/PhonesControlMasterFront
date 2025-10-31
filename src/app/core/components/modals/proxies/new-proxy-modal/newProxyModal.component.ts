@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, OnInit, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -22,6 +22,7 @@ import { LicenseTypeService } from '../../../../services/licenseType.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LicensesService } from '../../../../services/licenses.service';
 import { ProxiesService } from '../../../../services/proxies.service';
+import { CustomTableComponent } from '../../../custom-table/custom-table.component';
 export interface DialogData {
   devicesList: string[];
 }

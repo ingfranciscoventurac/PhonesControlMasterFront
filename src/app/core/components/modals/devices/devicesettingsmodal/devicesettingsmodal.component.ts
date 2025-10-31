@@ -21,6 +21,7 @@ import { LicensesService } from '../../../../services/licenses.service';
 import { UnassignConfirmationModalComponent } from '../../generics/unassign-confirmation-modal/unassign-confirmation-modal.component';
 import { LicensesActiveListModalComponent } from '../licenses-active-list-modal/licenses-active-list-modal.component';
 import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
+import { ProxiesService } from '../../../../services/proxies.service';
 export interface DialogData {
   devicesList: string[];
 }
@@ -43,7 +44,7 @@ export interface DialogData {
 export class DeviceSettingsModalComponent implements OnInit {
   userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   private fb = inject(UntypedFormBuilder);
-  deviceInfoForm!: UntypedFormGroup;
+  private proxiesService = inject(ProxiesService);
   readonly dialogRef = inject(MatDialogRef);
   readonly data = inject<any>(MAT_DIALOG_DATA);
   readonly device = this.data.id;
@@ -53,7 +54,28 @@ export class DeviceSettingsModalComponent implements OnInit {
   devicesService = inject(DevicesService);
   newOwnerId: number = this.ownerId ?? 0;
   gotLicenseId: any = 0;
+  gotProxyId: any = 0;
   readonly dialog = inject(MatDialog);
+  deviceInfoForm: UntypedFormGroup = this.fb.group({
+    statusName: [{ value: "", disabled: true }, Validators.required],
+    typeName: [{ value: "", disabled: true }, Validators.required],
+    groupName: [{ value: "", disabled: true }, Validators.required],
+    email: [{ value: "", disabled: true }, Validators.required],
+    password: [{ value: "", disabled: true }, Validators.required],
+    emailPassword: [{ value: "", disabled: true }, Validators.required],
+    expirationDate: [{ value: "", disabled: true }, Validators.required],
+    family: [{ value: "", disabled: true }, Validators.required],
+    deviceName: [{ value: this.deviceName, disabled: false }, Validators.required],
+    ownerId: [{ value: this.ownerId, disabled: false }, Validators.required],
+
+    origin: [{ value: "", disabled: true }, Validators.required],
+    userName: [{ value: "", disabled: true }, Validators.required],
+    ip: [{ value: "", disabled: true }, Validators.required],
+    port: [{ value: "", disabled: true }, Validators.required],
+    passwordProxy: [{ value: "", disabled: true }, Validators.required],
+    statusNameProxy: [{ value: "", disabled: true }, Validators.required],
+  });
+
   constructor(
     private sanitizer: DomSanitizer,
     public usersService: UsersService,
@@ -68,21 +90,37 @@ export class DeviceSettingsModalComponent implements OnInit {
     this.devicesService.getListOfPlayingArtist(this.deviceId);
     this.usersService.getAllActiveUsers();
     this.licensesService.getLicenseByDeviceId(this.device);
+    this.proxiesService.getProxyByDeviceId(this.device);
     this.licensesService.deviceLicenseInfo$.subscribe(info => {
+
       if (info) {
-        this.gotLicenseId = info.id;
-        this.deviceInfoForm = this.fb.group({
-          statusName: [{ value: info.statusName, disabled: true }, Validators.required],
-          typeName: [{ value: info.typeName, disabled: true }, Validators.required],
-          groupName: [{ value: info.groupName, disabled: true }, Validators.required],
-          email: [{ value: info.email, disabled: true }, Validators.required],
-          password: [{ value: info.password, disabled: true }, Validators.required],
-          emailPassword: [{ value: info.emailPassword, disabled: true }, Validators.required],
-          expirationDate: [{ value: info.expirationDate, disabled: true }, Validators.required],
-          family: [{ value: info.family, disabled: true }, Validators.required],
-          deviceName: [{ value: this.deviceName, disabled: false }, Validators.required],
-          ownerId: [{ value: this.ownerId, disabled: false }, Validators.required],
-        });
+        if (info.id) {
+          this.gotLicenseId = info.id;
+        }
+
+        this.deviceInfoForm.get("statusName")?.setValue(info.statusName);
+        this.deviceInfoForm.get("typeName")?.setValue(info.statusName);
+        this.deviceInfoForm.get("groupName")?.setValue(info.statusName);
+        this.deviceInfoForm.get("email")?.setValue(info.statusName);
+
+        this.deviceInfoForm.get("password")?.setValue(info.statusName);
+        this.deviceInfoForm.get("emailPassword")?.setValue(info.statusName);
+        this.deviceInfoForm.get("expirationDate")?.setValue(info.statusName);
+        this.deviceInfoForm.get("family")?.setValue(info.statusName);
+      }
+    });
+
+    this.proxiesService.deviceProxyInfo$.subscribe(info => {
+      if (info) {
+        if (info.id) {
+          this.gotProxyId = info.id;
+        }
+        this.deviceInfoForm.get("origin")?.setValue(info.ip);
+        this.deviceInfoForm.get("userName")?.setValue(info.userName);
+        this.deviceInfoForm.get("ip")?.setValue(info.ip);
+        this.deviceInfoForm.get("port")?.setValue(info.port);
+        this.deviceInfoForm.get("passwordProxy")?.setValue(info.password);
+        this.deviceInfoForm.get("statusNameProxy")?.setValue(info.statusName);
       }
     });
 
@@ -111,6 +149,27 @@ export class DeviceSettingsModalComponent implements OnInit {
     });
   }
   deleteDevice() {
+
+
+    const payload = {
+      licenseGroupInfo: {
+        "deviceId": this.device,
+        "deleteType": "device",
+      },
+    };
+
+    const dialogRef = this.dialog.open(DeleteConfirmationModalComponent, {
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if (result !== undefined) {
+      }
+    });
+  }
+
+  assignProxyOnDevice() {
 
 
     const payload = {
@@ -218,6 +277,10 @@ export class DeviceSettingsModalComponent implements OnInit {
       if (result !== undefined) {
       }
     });
+  }
+
+  unAssignProxyDevice() {
+
   }
 
 

@@ -67,81 +67,6 @@ export class EditLicenseGroupModalComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onSpotifyUrlDragOver(event: DragEvent) {
-    event.preventDefault(); // Allow drop
-  }
-
-  onSpotifyUrlDrop(event: DragEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const data = event.dataTransfer?.getData('text/plain') || '';
-    const url = data.trim();
-
-    const spotifyPlaylistPattern = /^https:\/\/open\.spotify\.com\/artist\/([A-Za-z0-9]+)(\?.*)?$/;
-    const match = spotifyPlaylistPattern.exec(url);
-
-    if (!match) {
-      console.warn('Invalid Spotify Artist URL:', url);
-      return;
-    }
-
-    const playlistId = match[1]; // Extracted playlist ID
-
-    // Append with comma if already has content
-    if (this.spotifyUrl && this.spotifyUrl.trim() !== '') {
-      this.spotifyUrl = `${this.spotifyUrl.trim()}, ${playlistId}`;
-      const result = this.convertToArray(this.spotifyUrl);
-      this.spotifyUrls = result;
-    } else {
-      this.spotifyUrl = playlistId;
-      const result = this.convertToArray(this.spotifyUrl);
-      this.spotifyUrls = result;
-    }
-
-    console.log('Playlist IDs:', this.spotifyUrl);
-  }
-
-  convertToArray(input: string): string[] {
-    return input
-      .split(",")               // split by commas
-      .map(item => item.trim()) // remove spaces around each item
-      .filter(item => item !== ""); // remove empty strings (if any)
-  }
-
-
-  onSpotifyUrlPaste(event: ClipboardEvent) {
-    event.preventDefault();
-
-    const pastedText = event.clipboardData?.getData('text/plain') || '';
-    const urls = pastedText.split(/\s+/); // split by spaces/newlines
-
-    const spotifyPlaylistPattern = /^https:\/\/open\.spotify\.com\/artist\/([A-Za-z0-9]+)(\?.*)?$/;
-
-    urls.forEach((url) => {
-      const match = spotifyPlaylistPattern.exec(url.trim());
-      if (!match) {
-        console.warn('Invalid Spotify Artist URL:', url);
-        return;
-      }
-
-      const playlistId = match[1]; // extracted ID
-
-      if (this.spotifyUrl && this.spotifyUrl.trim() !== '') {
-        this.spotifyUrl = `${this.spotifyUrl.trim()}, ${playlistId}`;
-        const result = this.convertToArray(this.spotifyUrl);
-        this.spotifyUrls = result;
-      } else {
-
-        this.spotifyUrl = playlistId;
-        const result = this.convertToArray(this.spotifyUrl);
-        this.spotifyUrls = result;
-      }
-    });
-
-    console.log('Playlist IDs after paste:', this.spotifyUrl);
-  }
-
   saveEditLicenseGroup() {
     if (this.editLicenseForm.invalid) {
       return;
@@ -165,7 +90,6 @@ export class EditLicenseGroupModalComponent implements OnInit {
       "warrantyExpirationDate": formattedWarrantyExpirationDate
     }
     this.licenseGroupService.editNewLicenseGroup(newLicenseGroup).then((response: any) => {
-      console.log("🚀 ~ EditLicenseGroupModalComponent ~ saveEditLicenseGroup ~ response:", response)
       this.messageService.showMessage("Grupo de licencias editado.", "success");
       this.closeModal();
     });

@@ -21,6 +21,7 @@ import { LicenseGroupService } from '../../../../services/licenseGroup.service';
 import { LicenseTypeService } from '../../../../services/licenseType.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LicensesService } from '../../../../services/licenses.service';
+import { ProxiesService } from '../../../../services/proxies.service';
 
 /**
  * @title Dialog Overview
@@ -43,6 +44,7 @@ export class DeleteConfirmationModalComponent implements OnInit {
   public licenseGroupService = inject(LicenseGroupService);
   public licensesService = inject(LicensesService);
   public licenseTypeService = inject(LicenseTypeService);
+  public proxiesService = inject(ProxiesService);
   readonly dialogRef = inject(MatDialogRef);
   readonly data = inject<any>(MAT_DIALOG_DATA);
   readonly licenseGroupInfo = this.data.licenseGroupInfo;
@@ -80,6 +82,12 @@ export class DeleteConfirmationModalComponent implements OnInit {
       case "device":
         this.devicesService.deleteDevice(this.licenseGroupInfo.deviceId).then((response: any) => {
           this.messageService.showMessage("Dispositivo eliminado.", "success");
+          this.closeModal();
+        });
+        return;
+      case "proxy":
+        this.proxiesService.deleteProxy(this.licenseGroupInfo.id).then((response: any) => {
+          this.messageService.showMessage("Proxy eliminado.", "success");
           this.closeModal();
         });
         return;

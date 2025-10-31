@@ -38,7 +38,10 @@ export class DevicesComponent implements OnInit {
   ngOnInit(): void {
     const permissions = localStorage.getItem("permissions") ?? "";
     this.permissions = JSON.parse(permissions);
+    this.loadDevices();
+  }
 
+  loadDevices() {
     if (this.permissions.p5) {
       this.devicesService.getDevicesAdmin();
     } else {
@@ -58,17 +61,13 @@ export class DevicesComponent implements OnInit {
   readonly dialog = inject(MatDialog);
 
   openPlaylistModal(): void {
-
     const dialogRef = this.dialog.open(AddplaylistmodalComponent, {
       data: { devicesList: this.selectedDevices },
-
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-        this.animal.set(result);
-      }
+      this.loadDevices();
     });
   }
 
@@ -98,9 +97,7 @@ export class DevicesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-        this.animal.set(result);
-      }
+      this.loadDevices();
     });
   }
 
@@ -115,9 +112,7 @@ export class DevicesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.loadDevices();
     });
   }
 
@@ -132,9 +127,7 @@ export class DevicesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-
-      }
+      this.loadDevices();
     });
   }
 
@@ -145,9 +138,7 @@ export class DevicesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-        this.animal.set(result);
-      }
+      this.loadDevices();
     });
   }
 
@@ -158,9 +149,7 @@ export class DevicesComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-        this.animal.set(result);
-      }
+      this.loadDevices();
     });
   }
 
@@ -186,7 +175,6 @@ export class DevicesComponent implements OnInit {
         this.selectedDevices = devices.map((d: any) => d.deviceId);
         this.allSelected = true;
       }
-
       console.log('Current selected devices:', this.selectedDevices);
     }).unsubscribe();
   }

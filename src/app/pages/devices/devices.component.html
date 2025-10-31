@@ -25,7 +25,7 @@
                     [checked]="selectedDevices.includes(devices.deviceId)"
                     (change)="onCheckboxChange($event, devices.deviceId)">
                 <div class="p-1 rounded-xl border-2 border-transparent">
-                    <div class="phone" aria-hidden="true">
+                    <div class="phone cursor-pointer" aria-hidden="true">
                         <div class="screen">
                             <div class="notch" aria-hidden="true"></div>
 
@@ -96,7 +96,7 @@
                     [checked]="selectedDevices.includes(devices.deviceId)"
                     (change)="onCheckboxChange($event, devices.deviceId)">
                 <div class="p-1 rounded-xl border-2 border-transparent ">
-                    <div class="phone" aria-hidden="true">
+                    <div class="phone cursor-pointer" aria-hidden="true">
                         <div class="screen">
                             <div class="notch" aria-hidden="true"></div>
 
@@ -166,7 +166,7 @@
                     <input type="checkbox" class="peer sr-only" [id]="`chk-${devices.deviceId}`"
                         [value]="devices.deviceId" [checked]="selectedDevices.includes(devices.deviceId)"
                         (change)="onCheckboxChange($event, devices.deviceId)">
-                    <div class="phone" aria-hidden="true" (click)="toggleCheckbox(devices.deviceId)">
+                    <div class="phone cursor-pointer" aria-hidden="true" (click)="toggleCheckbox(devices.deviceId)">
                         <div class="screen">
                             <div class="notch" aria-hidden="true"></div>
 
@@ -242,8 +242,6 @@
 
             }
             }
-
-
         </div>
 
     </div>

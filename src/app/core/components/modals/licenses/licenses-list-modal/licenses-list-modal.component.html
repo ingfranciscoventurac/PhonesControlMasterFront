@@ -19,7 +19,7 @@
     <div class="flex flex-col gap-4">
         <div class="flex-1">
 
-            <CustomTable [cols]="columns" [hasOverlayMenu]="true" [fetchData]="getLicenses"
+            <CustomTable #customTable [cols]="columns" [hasOverlayMenu]="true" [fetchData]="getLicenses"
                 [data$]="licensesService.licensesList$" [totalRecords$]="licensesService.totalRecordsList$"
                 (rowSelected)="rowSelected($event)">
                 <ng-template #customMenuTemplate let-closeMenu="closeMenu">

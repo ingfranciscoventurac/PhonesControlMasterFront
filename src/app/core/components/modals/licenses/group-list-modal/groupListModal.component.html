@@ -17,7 +17,7 @@
         </button>
     </div>
     <div class="flex flex-col gap-4">
-        <CustomTable [cols]="columns" [hasOverlayMenu]="true" [fetchData]="getLicenseGroupPagination"
+        <CustomTable #customTable [cols]="columns" [hasOverlayMenu]="true" [fetchData]="getLicenseGroupPagination"
             [data$]="licenseGroupService.licenseGroupsList$" [totalRecords$]="licenseGroupService.totalRecords$"
             (rowSelected)="rowSelected($event)">
             <ng-template #customMenuTemplate let-closeMenu="closeMenu">

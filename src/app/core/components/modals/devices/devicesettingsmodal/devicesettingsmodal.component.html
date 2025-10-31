@@ -14,7 +14,29 @@
     <mat-tab label="Información">
         <form class="p-4" [formGroup]="deviceInfoForm">
             <div class="flex flex-col gap-4">
-                @if(gotLicenseId!==0){
+                <span class="text-2xl font-bold">Información de Dispositivo</span>
+                <div class="flex gap-2">
+                    <div class="flex-1">
+                        <label class="form-label">Cambiar Nombre</label>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            formControlName="deviceName">
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="form-label">Dueño</div>
+                        <select class="form-select" formControlName="ownerId">
+                            @for (user of usersService.allActiveUsers$ | async; track user.id) {
+                            <option [value]="user.id">{{user.name}}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                @if(gotLicenseId==0){
+                <span class="text-2xl font-bold">Sin Licencia</span>
+
+                }@else {
+
+                <span class="text-2xl font-bold">Licencia</span>
                 <div class="flex gap-2">
                     <div class="flex-1">
                         <div class="form-label">Cuenta</div>
@@ -71,31 +93,65 @@
                             [value]="deviceInfoForm.get('expirationDate')?.value | date: 'short' " [disabled]=" true">
                     </div>
                 </div>
+                }
+
+                @if(gotProxyId==0){
+                <span class="text-2xl font-bold">Sin Proxy</span>
 
                 }@else {
-                <span class="text-base font-bold">Sin Licencia</span>
-                }
+                <span class="text-2xl font-bold">Proxy</span>
+                <div class="flex gap-2">
+
+                    <div class="flex-1">
+                        <div class="form-label">Origen</div>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            formControlName="origin" [disabled]=" true">
+                    </div>
+                    <div class="flex-1">
+                        <div class="form-label">Estatus</div>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            formControlName="statusNameProxy" [disabled]=" true">
+                    </div>
+                </div>
                 <div class="flex gap-2">
                     <div class="flex-1">
-                        <label class="form-label">Cambiar Nombre</label>
+                        <div class="form-label">IP</div>
                         <input type="text" class="form-control" name="example-text-input" placeholder="|"
-                            formControlName="deviceName">
+                            formControlName="ip">
                     </div>
 
                     <div class="flex-1">
-                        <div class="form-label">Dueño</div>
-                        <select class="form-select" formControlName="ownerId">
-                            @for (user of usersService.allActiveUsers$ | async; track user.id) {
-                            <option [value]="user.id">{{user.name}}</option>
-                            }
-                        </select>
+                        <div class="form-label">Puerto</div>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            formControlName="port" [disabled]=" true">
                     </div>
                 </div>
+                <div class="flex gap-2">
+                    <div class="flex-1">
+                        <div class="form-label">Nombre de Usuario</div>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            formControlName="userName">
+                    </div>
+
+                    <div class="flex-1">
+                        <div class="form-label">Contraseña</div>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            [value]="deviceInfoForm.get('port')?.value" [disabled]=" true"
+                            formControlName="passwordProxy">>
+                    </div>
+                </div>
+
+                }
+
 
                 <div class="flex flex-row gap-2">
                     @if(gotLicenseId!==0){<button class="btn flex-1 btn-danger"
                         (click)="unAssignDevice()">Desasignar</button>}@else {
                     <button class="btn flex-1" (click)="assignDevice()">Asignar</button>
+                    }
+                    @if(gotProxyId!==0){<button class="btn flex-1 btn-danger" (click)="unAssignProxyDevice()">Desasignar
+                        Proxy</button>}@else {
+                    <button class="btn flex-1" (click)="assignProxyOnDevice()">Asignar Proxy</button>
                     }
                     <button class="btn btn-danger flex-1" (click)="deleteDevice()">Borrar Dispositivo</button>
                     <button class="btn flex-1" (click)="saveNewSettings()">Guardar</button>

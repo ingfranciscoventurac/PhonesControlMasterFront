@@ -48,7 +48,7 @@
             </div>
         </div>
         <div class="flex-1">
-            <CustomTable [cols]="columns" [hasOverlayMenu]="true" [customFetchData]="getLicenses"
+            <CustomTable #customTable [cols]="columns" [hasOverlayMenu]="true" [customFetchData]="getLicenses"
                 [data$]="licensesService.licenses$" [totalRecords$]="licensesService.totalRecords$"
                 [isCustomPagination]="true" [additionalPaginationVariables]="customPagination"
                 [customFetchDataType]="'licenses'" (rowSelected)="rowSelected($event)">
