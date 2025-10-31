@@ -45,6 +45,7 @@ export class LicensesComponent implements OnInit {
   }
   columns = [
     { variableName: 'id', headerName: 'Id', dataType: 'string' },
+    { variableName: 'deviceId', headerName: 'Numero De Dispositivo', dataType: 'string' },
     { variableName: 'name', headerName: 'Nombre de Dispositivo', dataType: 'string' },
     { variableName: 'typeName', headerName: 'Tipo De Cuenta', dataType: 'string' },
     { variableName: 'groupName', headerName: 'Grupo', dataType: 'string' },
