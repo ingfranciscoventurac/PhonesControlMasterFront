@@ -99,14 +99,14 @@ export class DeviceSettingsModalComponent implements OnInit {
         }
 
         this.deviceInfoForm.get("statusName")?.setValue(info.statusName);
-        this.deviceInfoForm.get("typeName")?.setValue(info.statusName);
-        this.deviceInfoForm.get("groupName")?.setValue(info.statusName);
-        this.deviceInfoForm.get("email")?.setValue(info.statusName);
+        this.deviceInfoForm.get("typeName")?.setValue(info.typeName);
+        this.deviceInfoForm.get("groupName")?.setValue(info.groupName);
+        this.deviceInfoForm.get("email")?.setValue(info.email);
 
-        this.deviceInfoForm.get("password")?.setValue(info.statusName);
-        this.deviceInfoForm.get("emailPassword")?.setValue(info.statusName);
-        this.deviceInfoForm.get("expirationDate")?.setValue(info.statusName);
-        this.deviceInfoForm.get("family")?.setValue(info.statusName);
+        this.deviceInfoForm.get("password")?.setValue(info.password);
+        this.deviceInfoForm.get("emailPassword")?.setValue(info.emailPassword);
+        this.deviceInfoForm.get("expirationDate")?.setValue(info.expirationDate);
+        this.deviceInfoForm.get("family")?.setValue(info.family);
       }
     });
 

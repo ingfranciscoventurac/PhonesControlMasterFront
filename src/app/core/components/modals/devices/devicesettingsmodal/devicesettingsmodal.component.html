@@ -31,8 +31,14 @@
                         </select>
                     </div>
                 </div>
+                <div class="flex flex-row gap-2">
+                    <button class="btn flex-auto" (click)="saveNewSettings()">Guardar Cambios</button>
+                    <button class="btn btn-danger" (click)="deleteDevice()">Borrar Dispositivo</button>
+                </div>
                 @if(gotLicenseId==0){
-                <span class="text-2xl font-bold">Sin Licencia</span>
+                <span class="text-2xl font-bold">
+                    <span>Sin Licencia</span>
+                </span>
 
                 }@else {
 
@@ -82,9 +88,9 @@
 
                 <div class="flex gap-2">
                     <div class="flex-1">
-                        <div class="form-label">Familia</div>
+                        <div class="form-label">¿Es Plan Familiar?</div>
                         <input type="text" class="form-control" name="example-text-input" placeholder="|"
-                            formControlName="family">
+                            [value]="deviceInfoForm.get('family')?.value==0?'Si': 'No'" [disabled]=" true">
                     </div>
 
                     <div class="flex-1">
@@ -94,6 +100,13 @@
                     </div>
                 </div>
                 }
+                <div class="flex flex-row gap-2">
+                    @if(gotLicenseId!==0){<button class="btn flex-1 btn-danger" (click)="unAssignDevice()">Desasignar
+                        Licencia</button>}@else {
+                    <button class="btn flex-1" (click)="assignDevice()">Asignar Licencia</button>
+                    }
+                </div>
+
 
                 @if(gotProxyId==0){
                 <span class="text-2xl font-bold">Sin Proxy</span>
@@ -142,20 +155,15 @@
                 </div>
 
                 }
-
-
                 <div class="flex flex-row gap-2">
-                    @if(gotLicenseId!==0){<button class="btn flex-1 btn-danger"
-                        (click)="unAssignDevice()">Desasignar</button>}@else {
-                    <button class="btn flex-1" (click)="assignDevice()">Asignar</button>
-                    }
+
                     @if(gotProxyId!==0){<button class="btn flex-1 btn-danger" (click)="unAssignProxyDevice()">Desasignar
                         Proxy</button>}@else {
                     <button class="btn flex-1" (click)="assignProxyOnDevice()">Asignar Proxy</button>
                     }
-                    <button class="btn btn-danger flex-1" (click)="deleteDevice()">Borrar Dispositivo</button>
-                    <button class="btn flex-1" (click)="saveNewSettings()">Guardar</button>
+
                 </div>
+
 
             </div>
         </form>
