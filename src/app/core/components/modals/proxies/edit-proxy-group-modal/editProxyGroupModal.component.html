@@ -1,0 +1,71 @@
+<div class="flex p-4 pb-0 justify-between items-center">
+    <span class="text-xl font-bold">Editar Grupo</span>
+    <div class="cursor-pointer" (click)="closeModal()">
+        <svg transform="scale(1.5)" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M18 6l-12 12" />
+            <path d="M6 6l12 12" />
+        </svg>
+    </div>
+</div>
+<div class="p-4">
+    <div class="flex flex-col gap-4">
+        <form [formGroup]="editLicenseForm" (submit)="saveEditLicenseGroup()">
+            <div class="flex flex-col gap-4">
+                <div class="flex gap-2">
+                    <div class="flex-1">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" formControlName="typeId">
+                            @for (type of licenseTypeService.licenseType$| async; track type.id) {
+                            <option [value]="type.id">{{type.name}}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+
+                    <div class="flex-1">
+                        <label class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="example-text-input" placeholder="|"
+                            formControlName="name">
+                    </div>
+
+                </div>
+
+                <div class="flex gap-2">
+                    <div class="flex-1">
+                        <label class="form-label">Fecha de Compra</label>
+                        <mat-form-field>
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="purchaseDate" formControlName="purchaseDate">
+                            <mat-hint>DD/MM/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="purchaseDate"></mat-datepicker-toggle>
+                            <mat-datepicker #purchaseDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="flex-1">
+                        <label class="form-label">Expiración de Garantía</label>
+                        <mat-form-field>
+                            <mat-label>Choose a date</mat-label>
+                            <input matInput [matDatepicker]="warrantyExpirationDate"
+                                formControlName="warrantyExpirationDate">
+                            <mat-hint>DD/MM/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="warrantyExpirationDate"></mat-datepicker-toggle>
+                            <mat-datepicker #warrantyExpirationDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="flex flex-row">
+                    <button class="btn flex-1" type="submit">Guardar</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

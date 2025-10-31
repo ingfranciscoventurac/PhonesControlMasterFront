@@ -1,0 +1,31 @@
+<div class="flex p-4 gap-4">
+    <div class="flex flex-1 flex-col gap-4 p-4 bg-white rounded-xl">
+        <div class="flex flex-1 justify-between">
+            <span class="text-2xl font-bold">Proxies</span>
+            <div class="flex gap-2">
+                <button type="button" class="btn" (click)="openProxiesListModal()">
+                    Proxies
+                </button>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <div>
+                <label for="searchInput" class="col-12 col-form-label text-lg-start">Buscar</label>
+                <input class="form-control" type="text" [value]="customPagination.filters" id="searchInput"
+                    (input)="sort($event,'filters')" />
+            </div>
+        </div>
+        <div class="flex-1">
+            <CustomTable #customTable [cols]="columns" [hasOverlayMenu]="true" [customFetchData]="getProxies"
+                [data$]="proxiesService.proxies$" [totalRecords$]="proxiesService.totalRecords$"
+                [isCustomPagination]="true" [additionalPaginationVariables]="customPagination"
+                [customFetchDataType]="'proxies'" (rowSelected)="rowSelected($event)">
+                <ng-template #customMenuTemplate let-closeMenu="closeMenu">
+                    <!-- <button class="text-primary" (click)="openEditLicenseModal();closeMenu()">Editar</button> -->
+                    <button class="text-danger" (click)="openUnassignDeviceProxyModal();closeMenu()">Desasignar</button>
+                </ng-template>
+            </CustomTable>
+        </div>
+
+    </div>
+</div>

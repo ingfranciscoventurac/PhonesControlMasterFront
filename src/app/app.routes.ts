@@ -10,6 +10,7 @@ import { DevicesComponent } from './pages/devices/devices.component';
 import { UsersComponent } from './pages/users/users.component';
 import { PermissionGuard } from './core/guards/core/guards/permission.guard';
 import { LicensesComponent } from './pages/licenses/licenses.component';
+import { ProxiesComponent } from './pages/proxies/proxies.component';
 export const routes: Routes = [
     {
         path: '',
@@ -20,6 +21,7 @@ export const routes: Routes = [
             { path: 'devices', component: DevicesComponent, canActivate: [PermissionGuard], data: { permission: 'p3' } },
             { path: 'users', component: UsersComponent, canActivate: [PermissionGuard], data: { permission: 'p4' } },
             { path: 'licenses', component: LicensesComponent, canActivate: [PermissionGuard], data: { permission: 'p1' } },
+            { path: 'proxies', component: ProxiesComponent, canActivate: [PermissionGuard], data: { permission: 'p1' } },
         ]
     },
     {

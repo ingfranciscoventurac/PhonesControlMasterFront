@@ -246,7 +246,24 @@ export class CustomTableComponent implements OnDestroy, OnInit, OnChanges {
           this.customFetchData!(customPaginationRequest);
           return;
         }
-      } else {
+      }
+      else if (this.customFetchDataType == "proxies") {
+
+        const customPaginationRequest: any = {
+          first: (this.currentPage - 1) * this.pageSize,
+          rows: this.pageSize,
+          sortField: this.sortedColumn == null ? 'id' : this.sortedColumn,
+          sortOrder: sortOrderValue,
+          filters: this.additionalPaginationVariables.filters,
+          userId: this.additionalPaginationVariables.userId,
+        }
+
+        if (this.isCustomPagination) {
+          this.customFetchData!(customPaginationRequest);
+          return;
+        }
+      }
+      else {
         const customPaginationRequest: TransactionsPaginationRequest = {
           first: (this.currentPage - 1) * this.pageSize,
           rows: this.pageSize,
