@@ -44,6 +44,7 @@ export interface DialogData {
 })
 export class LicensesActiveListModalComponent implements OnInit {
   //DEPENDENCIES///////////////////////////////////////////////////////
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   readonly dialog = inject(MatDialog);
   private fb = inject(UntypedFormBuilder);
   public licensesService = inject(LicensesService);
@@ -55,10 +56,17 @@ export class LicensesActiveListModalComponent implements OnInit {
   //DEPENDENCIES///////////////////////////////////////////////////////
 
   //VARIABELS///////////////////////////////////////////////////////
-  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   selectedRow: any;
   readonly devices = model(this.data.devicesList);
   newLicenseForm!: UntypedFormGroup;
+  customPagination = {
+    first: 0,
+    rows: 10,
+    sortField: 'id',
+    sortOrder: 1,
+    filters: "",
+    userId: this.userInfo.id,
+  };
 
   columns = [
     { variableName: 'id', headerName: 'Id', dataType: 'string' },

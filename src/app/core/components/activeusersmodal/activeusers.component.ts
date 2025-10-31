@@ -32,6 +32,7 @@ import { MessageService } from '../../services/message.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActiveUsersModalComponent implements OnInit {
+  userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
 
   readonly dialogRef = inject(MatDialogRef);
   readonly dialogData = inject<any>(MAT_DIALOG_DATA);
