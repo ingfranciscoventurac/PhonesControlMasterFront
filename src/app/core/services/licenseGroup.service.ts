@@ -26,9 +26,9 @@ export class LicenseGroupService {
       })
   }
 
-  async getLicenseGroup(): Promise<void> {
+  async getLicenseGroup(id: any): Promise<void> {
     this.licenseGroupSubject.next([]);
-    await GET_METHOD(`https://pcapi.valoracatalog.com/api/v1/LicenseGroup/All`,
+    await GET_METHOD(`https://pcapi.valoracatalog.com/api/v1/LicenseGroup/All?UserId=${id}`,
       true).then((response: any) => {
         this.licenseGroupSubject.next(response?.types);
       })

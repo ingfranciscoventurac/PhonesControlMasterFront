@@ -65,7 +65,7 @@ export class LicensesComponent implements OnInit {
 
   ngOnInit(): void {
     this.licenseTypeService.getLicenseType();
-    this.licenseGroupService.getLicenseGroup();
+    this.licenseGroupService.getLicenseGroup(this.userInfo.id);
   }
 
   sort(event: any, variableName: string) {
