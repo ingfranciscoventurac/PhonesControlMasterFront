@@ -22,6 +22,8 @@ import { UnassignConfirmationModalComponent } from '../../generics/unassign-conf
 import { LicensesActiveListModalComponent } from '../licenses-active-list-modal/licenses-active-list-modal.component';
 import { DeleteConfirmationModalComponent } from '../../generics/delete-confirmation-modal/delete-confirmation-modal.component';
 import { ProxiesService } from '../../../../services/proxies.service';
+import { UnassignProxyConfirmationModalComponent } from '../../generics/unassign-proxy-confirmation-modal/unassign-proxy-confirmation-modal.component';
+import { ProxiesActiveListModalComponent } from '../proxies-active-list-modal/proxies-active-list-modal.component';
 export interface DialogData {
   devicesList: string[];
 }
@@ -86,44 +88,62 @@ export class DeviceSettingsModalComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.loadInfo();
+  }
+
+  loadInfo() {
     this.devicesService.getListOfPlayingPlaylist(this.deviceId);
     this.devicesService.getListOfPlayingArtist(this.deviceId);
     this.usersService.getAllActiveUsers();
-    this.licensesService.getLicenseByDeviceId(this.device);
-    this.proxiesService.getProxyByDeviceId(this.device);
+    this.licensesService.getLicenseByDeviceId(this.device).then(() => {
+      this.loadLicenses();
+    });
+    this.proxiesService.getProxyByDeviceId(this.device).then(() => {
+      this.loadProxies();
+    });
+  }
+
+  loadProxies() {
+    this.proxiesService.deviceProxyInfo$.subscribe(info => {
+      console.log("🚀 ~ DeviceSettingsModalComponent ~ loadProxies ~ info:", info)
+
+      if (info) {
+        if (info.id) {
+          this.gotProxyId = info.id;
+          this.deviceInfoForm.get("origin")?.setValue(info.ip);
+          this.deviceInfoForm.get("userName")?.setValue(info.userName);
+          this.deviceInfoForm.get("ip")?.setValue(info.ip);
+          this.deviceInfoForm.get("port")?.setValue(info.port);
+          this.deviceInfoForm.get("passwordProxy")?.setValue(info.password);
+          this.deviceInfoForm.get("statusNameProxy")?.setValue(info.statusName);
+        } else {
+          this.gotProxyId = 0;
+        }
+
+      }
+    });
+  }
+
+  loadLicenses() {
     this.licensesService.deviceLicenseInfo$.subscribe(info => {
 
       if (info) {
         if (info.id) {
           this.gotLicenseId = info.id;
+          this.deviceInfoForm.get("statusName")?.setValue(info.statusName);
+          this.deviceInfoForm.get("typeName")?.setValue(info.typeName);
+          this.deviceInfoForm.get("groupName")?.setValue(info.groupName);
+          this.deviceInfoForm.get("email")?.setValue(info.email);
+
+          this.deviceInfoForm.get("password")?.setValue(info.password);
+          this.deviceInfoForm.get("emailPassword")?.setValue(info.emailPassword);
+          this.deviceInfoForm.get("expirationDate")?.setValue(info.expirationDate);
+          this.deviceInfoForm.get("family")?.setValue(info.family);
+        } else {
+          this.gotLicenseId = 0;
         }
-
-        this.deviceInfoForm.get("statusName")?.setValue(info.statusName);
-        this.deviceInfoForm.get("typeName")?.setValue(info.typeName);
-        this.deviceInfoForm.get("groupName")?.setValue(info.groupName);
-        this.deviceInfoForm.get("email")?.setValue(info.email);
-
-        this.deviceInfoForm.get("password")?.setValue(info.password);
-        this.deviceInfoForm.get("emailPassword")?.setValue(info.emailPassword);
-        this.deviceInfoForm.get("expirationDate")?.setValue(info.expirationDate);
-        this.deviceInfoForm.get("family")?.setValue(info.family);
       }
     });
-
-    this.proxiesService.deviceProxyInfo$.subscribe(info => {
-      if (info) {
-        if (info.id) {
-          this.gotProxyId = info.id;
-        }
-        this.deviceInfoForm.get("origin")?.setValue(info.ip);
-        this.deviceInfoForm.get("userName")?.setValue(info.userName);
-        this.deviceInfoForm.get("ip")?.setValue(info.ip);
-        this.deviceInfoForm.get("port")?.setValue(info.port);
-        this.deviceInfoForm.get("passwordProxy")?.setValue(info.password);
-        this.deviceInfoForm.get("statusNameProxy")?.setValue(info.statusName);
-      }
-    });
-
   }
 
   assignDevice() {
@@ -144,13 +164,10 @@ export class DeviceSettingsModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-      }
+      this.loadInfo();
     });
   }
   deleteDevice() {
-
-
     const payload = {
       licenseGroupInfo: {
         "deviceId": this.device,
@@ -164,31 +181,11 @@ export class DeviceSettingsModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-      }
+      this.loadInfo();
     });
   }
 
-  assignProxyOnDevice() {
 
-
-    const payload = {
-      licenseGroupInfo: {
-        "deviceId": this.device,
-        "deleteType": "device",
-      },
-    };
-
-    const dialogRef = this.dialog.open(DeleteConfirmationModalComponent, {
-      data: payload,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if (result !== undefined) {
-      }
-    });
-  }
 
   getSpotifyEmbedUrlPlaylist(playlist: string): SafeResourceUrl {
     const baseUrl = 'https://open.spotify.com/embed/playlist/';
@@ -274,15 +271,56 @@ export class DeviceSettingsModalComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if (result !== undefined) {
-      }
+      this.loadInfo();
     });
   }
 
   unAssignProxyDevice() {
+    const payload = {
+      proxyInfo: {
+        "deviceId": this.device,
+        "proxyId": this.gotProxyId,
+        "userId": this.userInfo.id
+      },
+    };
 
+    const dialogRef = this.dialog.open(UnassignProxyConfirmationModalComponent, {
+      width: '50vw', // or '90vw'
+      maxWidth: '50vw', // to override default 80vw
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.loadInfo();
+      this.loadProxies()
+    });
   }
 
+
+  assignProxyOnDevice() {
+
+    const payload = {
+      proxyInfo: {
+        "deviceId": this.device,
+        "proxyId": 0,
+        "userId": this.userInfo.id
+      },
+    };
+
+    const dialogRef = this.dialog.open(ProxiesActiveListModalComponent, {
+      width: '80vw', // or '90vw'
+      maxWidth: '80vw', // to override default 80vw
+      height: '80vh', // to override default 80vw
+      data: payload,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.loadInfo();
+      this.loadProxies()
+    });
+  }
 
 
 

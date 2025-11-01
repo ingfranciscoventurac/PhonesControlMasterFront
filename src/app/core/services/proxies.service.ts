@@ -29,10 +29,10 @@ export class ProxiesService {
   totalRecordsList$: Observable<any> = this.totalRecordsListSubject.asObservable();
   //PROXIES LIST//////////////////////////////////////////////
 
-  // private licensesActiveListSubject = new BehaviorSubject<any>(undefined);
-  // licensesActiveList$: Observable<any> = this.licensesActiveListSubject.asObservable();
-  // private totalRecordsActiveListSubject = new BehaviorSubject<any>(undefined);
-  // totalRecordsActiveList$: Observable<any> = this.totalRecordsActiveListSubject.asObservable();
+  private proxiesActiveListSubject = new BehaviorSubject<any>(undefined);
+  proxiesActiveList$: Observable<any> = this.proxiesActiveListSubject.asObservable();
+  private totalRecordsActiveListSubject = new BehaviorSubject<any>(undefined);
+  totalRecordsActiveList$: Observable<any> = this.totalRecordsActiveListSubject.asObservable();
 
   async getProxyByDeviceId(id: number): Promise<void> {
     this.deviceProxyInfoSubject.next([]);
@@ -60,14 +60,14 @@ export class ProxiesService {
       })
   }
 
-  // async getProxiesActivePagination(pagination: any): Promise<void> {
-  //   this.licensesActiveListSubject.next([]);
-  //   await POST_METHOD(`https://pcapi.valoracatalog.com/api/v1/License/PaginationActive`, pagination,
-  //     true).then((response: any) => {
-  //       this.licensesActiveListSubject.next(response?.data);
-  //       this.totalRecordsActiveListSubject.next(response?.totalRecords);
-  //     })
-  // }
+  async getProxiesActivePagination(pagination: any): Promise<void> {
+    this.proxiesActiveListSubject.next([]);
+    await POST_METHOD(`https://pcapi.valoracatalog.com/api/v1/Proxy/PaginationActive`, pagination,
+      true).then((response: any) => {
+        this.proxiesActiveListSubject.next(response?.data);
+        this.totalRecordsActiveListSubject.next(response?.totalRecords);
+      })
+  }
 
   async addNewProxy(newProxy: any): Promise<any> {
     await POST_METHOD(`https://pcapi.valoracatalog.com/api/v1/Proxy/Add`, newProxy,
