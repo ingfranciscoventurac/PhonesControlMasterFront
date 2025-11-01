@@ -49,6 +49,14 @@ export class ProxiesListModalComponent {
     { variableName: 'createdDate', headerName: 'Fecha de Creación', dataType: 'date' },
     { variableName: 'modifiedDate', headerName: 'Fecha de Modification', dataType: 'date' },
   ];
+  customPagination: any = {
+    first: 0,
+    rows: 10,
+    sortField: 'createdDate',
+    sortOrder: -1,
+    filters: '',
+    userId: this.userInfo.id
+  }
   //VARIABELS///////////////////////////////////////////////////////
 
   constructor() { }

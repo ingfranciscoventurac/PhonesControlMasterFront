@@ -9,6 +9,7 @@ import { ProxiesService } from '../../core/services/proxies.service';
 import { ProxiesListModalComponent } from '../../core/components/modals/proxies/proxy-list-modal/proxies-list-modal.component';
 import { NewProxyModalComponent } from '../../core/components/modals/proxies/new-proxy-modal/newProxyModal.component';
 import { EditProxyModalComponent } from '../../core/components/modals/proxies/edit-proxy-modal/editProxyModal.component';
+import { UnassignProxyConfirmationModalComponent } from '../../core/components/modals/generics/unassign-proxy-confirmation-modal/unassign-proxy-confirmation-modal.component';
 
 @Component({
   selector: 'app-proxies',
@@ -17,6 +18,7 @@ import { EditProxyModalComponent } from '../../core/components/modals/proxies/ed
   styleUrls: ['./proxies.component.scss'],
 })
 export class ProxiesComponent implements OnInit {
+
   @ViewChild('customTable') customTable!: CustomTableComponent;
   userInfo = JSON.parse(localStorage.getItem("userInfo") ?? "null");
   selectedDevices: string[] = [];
@@ -121,18 +123,19 @@ export class ProxiesComponent implements OnInit {
     });
   }
 
+
+
   openUnassignDeviceProxyModal() {
 
     const payload = {
-      payload: {
-        "option": "proxies",
+      proxyInfo: {
         "deviceId": this.selectedRow?.id,
-        "licenseId": this.selectedRow?.licenseId,
+        "proxyId": this.selectedRow?.proxyId,
         "userId": this.userInfo.id
       },
     };
 
-    const dialogRef = this.dialog.open(UnassignConfirmationModalComponent, {
+    const dialogRef = this.dialog.open(UnassignProxyConfirmationModalComponent, {
       width: '50vw', // or '90vw'
       maxWidth: '50vw', // to override default 80vw
       data: payload,
@@ -142,6 +145,7 @@ export class ProxiesComponent implements OnInit {
       console.log('The dialog was closed');
       this.customTable.loadPage();
     });
+
   }
 
   rowSelected(data: any) {

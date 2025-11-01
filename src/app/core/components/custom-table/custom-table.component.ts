@@ -314,6 +314,23 @@ export class CustomTableComponent implements OnDestroy, OnInit, OnChanges {
           return;
         }
       }
+      else if (this.customFetchDataType == "proxiesList") {
+
+
+        const customPaginationRequest: any = {
+          first: (this.currentPage - 1) * this.pageSize,
+          rows: this.pageSize,
+          sortField: this.sortedColumn == null ? 'id' : this.sortedColumn,
+          sortOrder: sortOrderValue,
+          filters: this.additionalPaginationVariables.filters,
+          userId: this.additionalPaginationVariables.userId,
+        }
+
+        if (this.isCustomPagination) {
+          this.customFetchData!(customPaginationRequest);
+          return;
+        }
+      }
       else if (this.customFetchDataType == "proxiesActive") {
 
 
